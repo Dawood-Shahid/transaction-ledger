@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {View, Text, Icon} from 'native-base';
+import {useNavigation} from '@react-navigation/native';
 import {Feather} from '../Icons';
 import appColors from '../../color';
 
@@ -11,6 +12,8 @@ const Header = ({
   backHandler = null,
   rightIcon = null,
 }) => {
+  const navigation = useNavigation();
+
   const renderLeftIcon = () => {
     return (
       <TouchableOpacity
@@ -19,8 +22,7 @@ const Header = ({
           if (backHandler) {
             backHandler();
           } else {
-            // goBack();
-            console.log(`\nheader back clicked\n`);
+            navigation.goBack();
           }
         }}>
         {leftIcon ? (
@@ -30,7 +32,7 @@ const Header = ({
             as={Feather}
             name={'arrow-left'}
             size={'5'}
-            color={appColors.text}
+            color={appColors.white}
           />
         )}
       </TouchableOpacity>
@@ -44,7 +46,7 @@ const Header = ({
       </View>
       <View style={styles.titleContainer}>
         {title && (
-          <Text color={appColors.text} style={{}}>
+          <Text color={appColors.white} bold>
             {title}
           </Text>
         )}
