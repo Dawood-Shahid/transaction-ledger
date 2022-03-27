@@ -17,13 +17,14 @@ import {
   TRANSACTION_DATA,
   TRANSACTION_TYPE_EXPENSE,
 } from '../constants/transactionConstant';
+import StatusTags from '../StatusTags';
 
 const ANIMATED_Value = new Animated.Value(0);
 
 const Home = () => {
   const [toggle, setToggle] = useState(false);
 
-  const toggleAnimation = () => {
+  const toggleAnimationHandler = () => {
     const toValue = toggle ? 0 : 1;
 
     Animated.timing(ANIMATED_Value, {
@@ -106,25 +107,17 @@ const Home = () => {
           <Text color={appColors.text}>{item.createdAt}</Text>
         </View>
         <View style={styles.cardStatusRow}>
-          <Text
-            fontSize={'2xs'}
-            p={2}
-            m={1}
-            bold
+          <StatusTags
+            text={item.paymentMethod}
             color={appColors.paymentMethodText}
-            style={styles.statusContainer(appColors.paymentMethodBackground)}>
-            {item.paymentMethod}
-          </Text>
+            background={appColors.paymentMethodBackground}
+          />
           {item.category && (
-            <Text
-              fontSize={'2xs'}
-              p={2}
-              m={1}
-              bold
+            <StatusTags
+              text={item.category}
               color={appColors.categoryText}
-              style={styles.statusContainer(appColors.categoryBackground)}>
-              {item.category}
-            </Text>
+              background={appColors.categoryBackground}
+            />
           )}
         </View>
         <View style={styles.cardAmountRow}>
@@ -143,6 +136,60 @@ const Home = () => {
           </Text>
         </View>
       </View>
+    );
+  };
+
+  const renderFloatButtonWithAnimation = () => {
+    return (
+      <>
+        <Animated.View
+          style={[styles.FloatingButtonBackground, styles.animateBackground]}
+        />
+        <Animated.View
+          style={[styles.transactionButton, styles.animateButton(-120)]}>
+          <FloatButton
+            position={{bottom: 0, right: 0}}
+            onClick={() => console.log(`\nadd button click\n`)}
+            color={appColors.red}
+            icon={
+              <Icon
+                as={AntDesign}
+                name={'minus'}
+                size={'6'}
+                color={appColors.white}
+              />
+            }
+          />
+        </Animated.View>
+        <Animated.View
+          style={[styles.transactionButton, styles.animateButton(-60)]}>
+          <FloatButton
+            position={{bottom: 0, right: 0}}
+            onClick={() => console.log(`\nadd button click\n`)}
+            color={appColors.green}
+            icon={
+              <Icon
+                as={Ionicons}
+                name={'md-add'}
+                size={'6'}
+                color={appColors.white}
+              />
+            }
+          />
+        </Animated.View>
+        <FloatButton
+          position={{bottom: 40, right: 30}}
+          onClick={toggleAnimationHandler}
+          icon={
+            <Icon
+              as={Entypo}
+              name={'add-to-list'}
+              size={'5'}
+              color={appColors.white}
+            />
+          }
+        />
+      </>
     );
   };
 
@@ -175,53 +222,7 @@ const Home = () => {
               </Text>
             )}
           </View>
-          <Animated.View
-            style={[styles.FloatingButtonBackground, styles.animateBackground]}
-          />
-          <Animated.View
-            style={[styles.transactionButton, styles.animateButton(-120)]}>
-            <FloatButton
-              position={{bottom: 0, right: 0}}
-              onClick={() => console.log(`\nadd button click\n`)}
-              color={appColors.red}
-              icon={
-                <Icon
-                  as={AntDesign}
-                  name={'minus'}
-                  size={'6'}
-                  color={appColors.white}
-                />
-              }
-            />
-          </Animated.View>
-          <Animated.View
-            style={[styles.transactionButton, styles.animateButton(-60)]}>
-            <FloatButton
-              position={{bottom: 0, right: 0}}
-              onClick={() => console.log(`\nadd button click\n`)}
-              color={appColors.green}
-              icon={
-                <Icon
-                  as={Ionicons}
-                  name={'md-add'}
-                  size={'6'}
-                  color={appColors.white}
-                />
-              }
-            />
-          </Animated.View>
-          <FloatButton
-            position={{bottom: 40, right: 30}}
-            onClick={toggleAnimation}
-            icon={
-              <Icon
-                as={Entypo}
-                name={'add-to-list'}
-                size={'5'}
-                color={appColors.white}
-              />
-            }
-          />
+          {renderFloatButtonWithAnimation()}
         </View>
       </SafeAreaView>
     </PageContainer>
@@ -268,10 +269,6 @@ const styles = StyleSheet.create({
     ...appStyles.flexRow,
     justifyContent: 'flex-start',
   },
-  statusContainer: statusType => ({
-    ...appStyles.containerBorderRadius(100),
-    backgroundColor: statusType,
-  }),
   cardAmountRow: {
     ...appStyles.flexRow,
     marginTop: 5,
