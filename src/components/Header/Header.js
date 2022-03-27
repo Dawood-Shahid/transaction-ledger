@@ -3,7 +3,6 @@ import {StyleSheet, TouchableOpacity} from 'react-native';
 import {View, Text, Icon} from 'native-base';
 import {Feather} from '../Icons';
 import appColors from '../../color';
-import appStyles from '../../style';
 
 const Header = ({
   title = null,

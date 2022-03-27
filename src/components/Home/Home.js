@@ -7,7 +7,6 @@ import {
   Animated,
 } from 'react-native';
 import {View, Text, Icon} from 'native-base';
-import * as Animatable from 'react-native-animatable';
 import PageContainer from '../PageContainer';
 import Header from '../Header';
 import FloatButton from '../FloatButton';
