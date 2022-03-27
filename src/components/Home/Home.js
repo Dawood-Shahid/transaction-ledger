@@ -7,6 +7,7 @@ import {
   Animated,
 } from 'react-native';
 import {View, Text, Icon} from 'native-base';
+import {useNavigation} from '@react-navigation/native';
 import PageContainer from '../PageContainer';
 import Header from '../Header';
 import FloatButton from '../FloatButton';
@@ -22,6 +23,7 @@ import StatusTags from '../StatusTags';
 const ANIMATED_Value = new Animated.Value(0);
 
 const Home = () => {
+  const navigation = useNavigation();
   const [toggle, setToggle] = useState(false);
 
   const toggleAnimationHandler = () => {
@@ -34,6 +36,11 @@ const Home = () => {
     }).start();
 
     setToggle(!toggle);
+  };
+
+  const navigationHandler = (navigateTo, params) => {
+    navigation.navigate(navigateTo, params);
+    toggleAnimationHandler();
   };
 
   const renderLeftIcon = () => {
@@ -149,7 +156,9 @@ const Home = () => {
           style={[styles.transactionButton, styles.animateButton(-120)]}>
           <FloatButton
             position={{bottom: 0, right: 0}}
-            onClick={() => console.log(`\nadd button click\n`)}
+            onClick={() =>
+              navigationHandler('TransactionDetail', {type: 'expense'})
+            }
             color={appColors.red}
             icon={
               <Icon
@@ -165,7 +174,9 @@ const Home = () => {
           style={[styles.transactionButton, styles.animateButton(-60)]}>
           <FloatButton
             position={{bottom: 0, right: 0}}
-            onClick={() => console.log(`\nadd button click\n`)}
+            onClick={() =>
+              navigationHandler('TransactionDetail', {type: 'income'})
+            }
             color={appColors.green}
             icon={
               <Icon
