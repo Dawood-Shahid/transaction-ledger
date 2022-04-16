@@ -5,8 +5,8 @@ export const TRANSACTION_DATA = [
     createdAt: '10:30 am',
     category: 'Salary',
     paymentMethod: 'Online',
-    balance: 80000,
-    amount: 80000,
+    balance: '80000',
+    amount: '80000',
     type: 'income',
   },
   {
@@ -15,8 +15,8 @@ export const TRANSACTION_DATA = [
     createdAt: '10:30 am',
     category: 'Bills',
     paymentMethod: 'Cash',
-    balance: 6000,
-    amount: 9999,
+    balance: '6000',
+    amount: '9999',
     type: 'expense',
   },
   {
@@ -25,8 +25,8 @@ export const TRANSACTION_DATA = [
     createdAt: '10:30 am',
     category: 'Grocery',
     paymentMethod: 'Cash',
-    balance: 20000,
-    amount: 999,
+    balance: '20000',
+    amount: '999',
     type: 'expense',
   },
   {
@@ -35,8 +35,8 @@ export const TRANSACTION_DATA = [
     createdAt: '10:30 am',
     category: 'Rent',
     paymentMethod: 'Cash',
-    balance: 15000,
-    amount: 999,
+    balance: '15000',
+    amount: '999',
     type: 'expense',
   },
   {
@@ -45,8 +45,8 @@ export const TRANSACTION_DATA = [
     createdAt: '10:30 am',
     category: 'Utility',
     paymentMethod: 'Cash',
-    balance: 1000,
-    amount: 999,
+    balance: '1000',
+    amount: '999',
     type: 'expense',
   },
   {
@@ -55,8 +55,8 @@ export const TRANSACTION_DATA = [
     createdAt: '10:30 am',
     category: 'Health',
     paymentMethod: 'Cash',
-    balance: 1000,
-    amount: 999,
+    balance: '1000',
+    amount: '999',
     type: 'expense',
   },
   {
@@ -65,10 +65,12 @@ export const TRANSACTION_DATA = [
     createdAt: '10:30 am',
     category: 'Health',
     paymentMethod: 'Cash',
-    balance: 1000,
-    amount: 999,
+    balance: '1000',
+    amount: '999',
     type: 'expense',
   },
 ];
 
-export const TRANSACTION_TYPE_EXPENSE = 'expense';
+export const CATEGORY = ['Labour Changes', 'Profit', 'Sale', 'Salary'];
+
+export const PAYMENT = ['Cash', 'Online', 'Bank Transfer', 'Cheque'];

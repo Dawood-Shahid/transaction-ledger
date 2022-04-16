@@ -12,13 +12,11 @@ import PageContainer from '../PageContainer';
 import Header from '../Header';
 import FloatButton from '../FloatButton';
 import {MaterialCommunityIcons, Entypo, Ionicons, AntDesign} from '../Icons';
+import {TRANSACTION_DATA} from '../constants/transactionConstant';
+import StatusTags from '../StatusTags';
+import {numberFormatter, TRANSACTION_TYPE_EXPENSE} from '../../appConstants';
 import appColors from '../../color';
 import appStyles from '../../style';
-import {
-  TRANSACTION_DATA,
-  TRANSACTION_TYPE_EXPENSE,
-} from '../constants/transactionConstant';
-import StatusTags from '../StatusTags';
 
 const ANIMATED_Value = new Animated.Value(0);
 
@@ -73,7 +71,7 @@ const Home = () => {
             Cash In
           </Text>
           <Text color={appColors.green} bold lineHeight={'2xl'}>
-            50000
+            {numberFormatter('50000')}
           </Text>
         </View>
         <View style={styles.cashDetailRow}>
@@ -81,7 +79,7 @@ const Home = () => {
             Cash Out
           </Text>
           <Text color={appColors.red} bold lineHeight={'2xl'}>
-            15000
+            {numberFormatter('15000')}
           </Text>
         </View>
         <View style={styles.cashDetailRowTotal}>
@@ -97,7 +95,7 @@ const Home = () => {
             bold
             fontSize={'md'}
             lineHeight={'2xl'}>
-            35000
+            {numberFormatter('35000')}
           </Text>
         </View>
       </View>
@@ -129,7 +127,7 @@ const Home = () => {
         </View>
         <View style={styles.cardAmountRow}>
           <Text fontSize={'xs'} color={appColors.subText}>
-            Balance: {item.balance}
+            Balance: {numberFormatter(item.balance)}
           </Text>
           <Text
             color={
@@ -139,7 +137,7 @@ const Home = () => {
             }
             bold
             lineHeight={'2xl'}>
-            {item.amount}
+            {numberFormatter(item.amount)}
           </Text>
         </View>
       </View>

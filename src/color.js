@@ -7,7 +7,9 @@ const appColors = {
   green: '#1CB023',
   text: '#726B76',
   subText: '#716D88',
-  background: '#F8F8FF',
+  background: '#F5F5F5',
+  inputBackground: '#EBEBEB',
+  inputIconColor: '#999999',
   cashDetailBackground: '#F7F0EA',
   cardBackground: '#F0F8F9',
   categoryBackground: '#EBDDF8',
@@ -15,6 +17,7 @@ const appColors = {
   paymentMethodBackground: '#D7FEFD',
   paymentMethodText: '#3EA39F',
   backgroundWithOpacity: 'rgba(91,90,98,0.3)',
+  transparent: 'transparent',
 };
 
 export default appColors;

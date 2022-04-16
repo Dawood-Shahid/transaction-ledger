@@ -7,9 +7,12 @@ const StatusTags = ({text, color, background}) => {
   return (
     <Text
       fontSize={'2xs'}
-      p={2}
+      px={2}
+      py={0.5}
       m={1}
       bold
+      borderWidth={0.6}
+      borderColor={color}
       color={color}
       style={styles.statusContainer(background)}>
       {text}
@@ -19,7 +22,7 @@ const StatusTags = ({text, color, background}) => {
 
 const styles = StyleSheet.create({
   statusContainer: statusType => ({
-    ...appStyles.containerBorderRadius(100),
+    ...appStyles.containerBorderRadius(5),
     backgroundColor: statusType,
   }),
 });
