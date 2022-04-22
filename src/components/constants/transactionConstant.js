@@ -74,3 +74,30 @@ export const TRANSACTION_DATA = [
 export const CATEGORY = ['Labour Changes', 'Profit', 'Sale', 'Salary'];
 
 export const PAYMENT = ['Cash', 'Online', 'Bank Transfer', 'Cheque'];
+
+export const LEDGER_DATA = [
+  {
+    id: 1,
+    title: 'Title 1',
+    createdAt: '10:30 am',
+    netBalance: '80000',
+  },
+  {
+    id: 2,
+    title: 'Title 2',
+    createdAt: '10:30 am',
+    netBalance: '80000',
+  },
+  {
+    id: 3,
+    title: 'Title 3',
+    createdAt: '10:30 am',
+    netBalance: '80000',
+  },
+  {
+    id: 4,
+    title: 'Title 4',
+    createdAt: '10:30 am',
+    netBalance: '80000',
+  },
+];

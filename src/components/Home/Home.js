@@ -20,8 +20,9 @@ import appStyles from '../../style';
 
 const ANIMATED_Value = new Animated.Value(0);
 
-const Home = () => {
+const Home = ({route}) => {
   const navigation = useNavigation();
+  const navigationProps = route.params;
   const [toggle, setToggle] = useState(false);
 
   const toggleAnimationHandler = () => {
@@ -50,8 +51,13 @@ const Home = () => {
           size={'5'}
           color={appColors.white}
         />
-        <Text color={appColors.white} ml={2} bold numberOfLines={1} width={125}>
-          Ledger Name Ledger Name Ledger Name
+        <Text
+          color={appColors.white}
+          ml={2}
+          bold
+          numberOfLines={1}
+          maxWidth={130}>
+          {navigationProps.type}
         </Text>
         <Icon
           as={Entypo}
@@ -105,41 +111,44 @@ const Home = () => {
   const renderCard = ({item}) => {
     return (
       <View style={styles.cardContainer}>
-        <View style={styles.cardTitleRow}>
-          <Text noOfLines={2} width={250} color={appColors.primary}>
-            {item.title}
-          </Text>
-          <Text color={appColors.text}>{item.createdAt}</Text>
-        </View>
-        <View style={styles.cardStatusRow}>
-          <StatusTags
-            text={item.paymentMethod}
-            color={appColors.paymentMethodText}
-            background={appColors.paymentMethodBackground}
-          />
-          {item.category && (
+        <View style={styles.cardContentContainer}>
+          <View style={styles.cardTitleRow}>
+            <Text noOfLines={2} width={250} color={appColors.primary}>
+              {item.title}
+            </Text>
+            <Text color={appColors.text}>{item.createdAt}</Text>
+          </View>
+          <View style={styles.cardStatusRow}>
             <StatusTags
-              text={item.category}
-              color={appColors.categoryText}
-              background={appColors.categoryBackground}
+              text={item.paymentMethod}
+              color={appColors.paymentMethodText}
+              background={appColors.paymentMethodBackground}
             />
-          )}
+            {item.category && (
+              <StatusTags
+                text={item.category}
+                color={appColors.categoryText}
+                background={appColors.categoryBackground}
+              />
+            )}
+          </View>
+          <View style={styles.cardAmountRow}>
+            <Text fontSize={'xs'} color={appColors.subText}>
+              Balance: {numberFormatter(item.balance)}
+            </Text>
+            <Text
+              color={
+                item.type === TRANSACTION_TYPE_EXPENSE
+                  ? appColors.red
+                  : appColors.green
+              }
+              bold
+              lineHeight={'2xl'}>
+              {numberFormatter(item.amount)}
+            </Text>
+          </View>
         </View>
-        <View style={styles.cardAmountRow}>
-          <Text fontSize={'xs'} color={appColors.subText}>
-            Balance: {numberFormatter(item.balance)}
-          </Text>
-          <Text
-            color={
-              item.type === TRANSACTION_TYPE_EXPENSE
-                ? appColors.red
-                : appColors.green
-            }
-            bold
-            lineHeight={'2xl'}>
-            {numberFormatter(item.amount)}
-          </Text>
-        </View>
+        <View style={styles.sidebar(item.type === TRANSACTION_TYPE_EXPENSE)} />
       </View>
     );
   };
@@ -147,45 +156,52 @@ const Home = () => {
   const renderFloatButtonWithAnimation = () => {
     return (
       <>
-        <Animated.View
-          style={[styles.FloatingButtonBackground, styles.animateBackground]}
-        />
-        <Animated.View
-          style={[styles.transactionButton, styles.animateButton(-120)]}>
-          <FloatButton
-            position={{bottom: 0, right: 0}}
-            onClick={() =>
-              navigationHandler('TransactionDetail', {type: 'expense'})
-            }
-            color={appColors.red}
-            icon={
-              <Icon
-                as={AntDesign}
-                name={'minus'}
-                size={'6'}
-                color={appColors.white}
+        {toggle && (
+          <>
+            <Animated.View
+              style={[
+                styles.FloatingButtonBackground,
+                styles.animateBackground,
+              ]}
+            />
+            <Animated.View
+              style={[styles.transactionButton, styles.animateButton(-120)]}>
+              <FloatButton
+                position={{bottom: 0, right: 0}}
+                onClick={() =>
+                  navigationHandler('TransactionDetail', {type: 'expense'})
+                }
+                color={appColors.red}
+                icon={
+                  <Icon
+                    as={AntDesign}
+                    name={'minus'}
+                    size={'6'}
+                    color={appColors.white}
+                  />
+                }
               />
-            }
-          />
-        </Animated.View>
-        <Animated.View
-          style={[styles.transactionButton, styles.animateButton(-60)]}>
-          <FloatButton
-            position={{bottom: 0, right: 0}}
-            onClick={() =>
-              navigationHandler('TransactionDetail', {type: 'income'})
-            }
-            color={appColors.green}
-            icon={
-              <Icon
-                as={Ionicons}
-                name={'md-add'}
-                size={'6'}
-                color={appColors.white}
+            </Animated.View>
+            <Animated.View
+              style={[styles.transactionButton, styles.animateButton(-60)]}>
+              <FloatButton
+                position={{bottom: 0, right: 0}}
+                onClick={() =>
+                  navigationHandler('TransactionDetail', {type: 'income'})
+                }
+                color={appColors.green}
+                icon={
+                  <Icon
+                    as={Ionicons}
+                    name={'md-add'}
+                    size={'6'}
+                    color={appColors.white}
+                  />
+                }
               />
-            }
-          />
-        </Animated.View>
+            </Animated.View>
+          </>
+        )}
         <FloatButton
           position={{bottom: 40, right: 30}}
           onClick={toggleAnimationHandler}
@@ -208,7 +224,7 @@ const Home = () => {
       <SafeAreaView style={appStyles.flexCount(1)}>
         <Header
           leftIcon={renderLeftIcon}
-          backHandler={() => console.log(`\nnavigate to ledger list\n`)}
+          backHandler={() => navigation.goBack()}
         />
         <View style={styles.mainContainer}>
           {renderCashDetailCard()}
@@ -262,13 +278,19 @@ const styles = StyleSheet.create({
     borderTopColor: appColors.primary,
   },
   cardContainer: {
+    ...appStyles.flexRow,
+    justifyContent: 'flex-start',
     backgroundColor: appColors.cardBackground,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
     marginVertical: 5,
     marginHorizontal: 10,
     ...appStyles.containerBorderRadius(),
     ...appStyles.boxShadow,
+  },
+  cardContentContainer: {
+    ...appStyles.flexCount(1),
+    paddingVertical: 10,
+    paddingLeft: 20,
+    paddingRight: 10,
   },
   cardTitleRow: {
     ...appStyles.flexRow,
@@ -282,6 +304,14 @@ const styles = StyleSheet.create({
     ...appStyles.flexRow,
     marginTop: 5,
   },
+  sidebar: color => ({
+    backgroundColor: color ? appColors.expenseStatus : appColors.incomeStatus,
+    width: 10,
+    height: '100%',
+    ...appStyles.containerBorderRadius(),
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
+  }),
   transactionButton: {
     position: 'absolute',
     bottom: 40,
@@ -321,7 +351,7 @@ const styles = StyleSheet.create({
       {
         scale: ANIMATED_Value.interpolate({
           inputRange: [0, 1],
-          outputRange: [0, 30],
+          outputRange: [0, 100],
         }),
       },
     ],

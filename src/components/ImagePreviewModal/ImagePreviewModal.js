@@ -24,7 +24,7 @@ const ImagesPreviewModal = ({
       <View style={styles.header}>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
-            activeOpacity={0.9}
+            activeOpacity={1}
             onPress={() => {
               setModalVisible(false);
             }}>

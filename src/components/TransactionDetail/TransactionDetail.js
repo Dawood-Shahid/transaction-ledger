@@ -1,12 +1,6 @@
 import React, {useState, useEffect} from 'react';
+import {SafeAreaView, StyleSheet, TouchableOpacity} from 'react-native';
 import {
-  SafeAreaView,
-  StyleSheet,
-  TouchableOpacity,
-  Animated,
-} from 'react-native';
-import {
-  StatusBar,
   View,
   Text,
   Input,
@@ -29,8 +23,8 @@ import {ImagePicker} from '../../appConstants';
 import ImagesPreviewModal from '../ImagePreviewModal/ImagePreviewModal';
 
 const TransactionDetail = ({route}) => {
-  const navigationProps = route.params;
   const navigation = useNavigation();
+  const navigationProps = route.params;
   const transactionType =
     navigationProps.type === TRANSACTION_TYPE_EXPENSE ? 'Out' : 'In';
   const [amount, setAmount] = useState(0);
@@ -93,7 +87,6 @@ const TransactionDetail = ({route}) => {
 
   return (
     <PageContainer>
-      <StatusBar />
       <SafeAreaView style={appStyles.flexCount(1)}>
         <Header title={'Transaction Detail'} />
         <View style={styles.mainContainer}>
@@ -247,7 +240,7 @@ const TransactionDetail = ({route}) => {
             <View style={styles.imageContainer}>
               {attachments.map((image, index) => (
                 <TouchableOpacity
-                  activeOpacity={0.9}
+                  activeOpacity={0.7}
                   key={index}
                   onPress={() => {
                     setCurrentImageIndex(index);
@@ -295,8 +288,6 @@ const TransactionDetail = ({route}) => {
               style={styles.button()}>
               <Text
                 color={appColors.white}
-                fontSize="md"
-                bold
                 textTransform={'uppercase'}
                 textAlign={'center'}>
                 Save & Add
@@ -309,8 +300,6 @@ const TransactionDetail = ({route}) => {
               style={styles.button(true)}>
               <Text
                 color={appColors.white}
-                fontSize="md"
-                bold
                 textTransform={'uppercase'}
                 textAlign={'center'}>
                 Save

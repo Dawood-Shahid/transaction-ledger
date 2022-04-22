@@ -24,7 +24,7 @@ const appStyles = StyleSheet.create({
   }),
   boxShadow: {
     shadowColor: appColors.primary,
-    elevation: 10,
+    elevation: 4,
   },
 });
 
