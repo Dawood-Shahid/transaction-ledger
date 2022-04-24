@@ -17,6 +17,7 @@ import StatusTags from '../StatusTags';
 import {numberFormatter, TRANSACTION_TYPE_EXPENSE} from '../../appConstants';
 import appColors from '../../color';
 import appStyles from '../../style';
+import LinearGradient from 'react-native-linear-gradient';
 
 const ANIMATED_Value = new Animated.Value(0);
 
@@ -71,7 +72,12 @@ const Home = ({route}) => {
 
   const renderCashDetailCard = () => {
     return (
-      <View style={styles.cashDetails}>
+      <LinearGradient
+        colors={['#103783', appColors.gradient2]}
+        useAngle={true}
+        angle={45}
+        angleCenter={{x: 0, y: 0}}
+        style={styles.cashDetails}>
         <View style={styles.cashDetailRow}>
           <Text color={appColors.text} bold lineHeight={'2xl'}>
             Cash In
@@ -104,33 +110,48 @@ const Home = ({route}) => {
             {numberFormatter('35000')}
           </Text>
         </View>
-      </View>
+      </LinearGradient>
     );
   };
 
   const renderCard = ({item}) => {
     return (
-      <View style={styles.cardContainer}>
+      <View
+        style={styles.cardContainer(item.type === TRANSACTION_TYPE_EXPENSE)}>
         <View style={styles.cardContentContainer}>
-          <View style={styles.cardTitleRow}>
-            <Text noOfLines={2} width={250} color={appColors.primary}>
+          <View mb={1}>
+            <Text noOfLines={2} bold color={appColors.primary}>
               {item.title}
             </Text>
-            <Text color={appColors.text}>{item.createdAt}</Text>
+          </View>
+          <View style={appStyles.flexRow}>
+            <Text color={appColors.text}>
+              Transaction Date: {item.createdAt}
+            </Text>
+            <View style={styles.cardStatusRow}>
+              <StatusTags
+                text={item.paymentMethod}
+                color={appColors.paymentMethodText}
+                background={appColors.paymentMethodBackground}
+              />
+              {item.category && (
+                <StatusTags
+                  text={item.category}
+                  color={appColors.categoryText}
+                  background={appColors.categoryBackground}
+                />
+              )}
+            </View>
           </View>
           <View style={styles.cardStatusRow}>
-            <StatusTags
-              text={item.paymentMethod}
-              color={appColors.paymentMethodText}
-              background={appColors.paymentMethodBackground}
+            <Icon
+              as={Entypo}
+              name={'attachment'}
+              size={'3'}
+              color={appColors.primary}
+              style={styles.attachmentIcon}
             />
-            {item.category && (
-              <StatusTags
-                text={item.category}
-                color={appColors.categoryText}
-                background={appColors.categoryBackground}
-              />
-            )}
+            <Text m={1}>Attachment{item.attachment.length > 1 && 's'}</Text>
           </View>
           <View style={styles.cardAmountRow}>
             <Text fontSize={'xs'} color={appColors.subText}>
@@ -156,14 +177,11 @@ const Home = ({route}) => {
   const renderFloatButtonWithAnimation = () => {
     return (
       <>
+        <Animated.View
+          style={[styles.FloatingButtonBackground, styles.animateBackground]}
+        />
         {toggle && (
           <>
-            <Animated.View
-              style={[
-                styles.FloatingButtonBackground,
-                styles.animateBackground,
-              ]}
-            />
             <Animated.View
               style={[styles.transactionButton, styles.animateButton(-120)]}>
               <FloatButton
@@ -260,7 +278,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   cashDetails: {
-    backgroundColor: appColors.cashDetailBackground,
+    // backgroundColor: appColors.cardBackground,
     paddingVertical: 10,
     margin: 10,
     ...appStyles.containerBorderRadius(),
@@ -268,7 +286,6 @@ const styles = StyleSheet.create({
   },
   cashDetailRow: {
     ...appStyles.flexRow,
-
     paddingHorizontal: 20,
   },
   cashDetailRowTotal: {
@@ -277,15 +294,17 @@ const styles = StyleSheet.create({
     borderTopWidth: 0.5,
     borderTopColor: appColors.primary,
   },
-  cardContainer: {
+  cardContainer: background => ({
     ...appStyles.flexRow,
     justifyContent: 'flex-start',
-    backgroundColor: appColors.cardBackground,
+    backgroundColor: background
+      ? appColors.expenseBackground
+      : appColors.incomeBackground,
     marginVertical: 5,
     marginHorizontal: 10,
     ...appStyles.containerBorderRadius(),
     ...appStyles.boxShadow,
-  },
+  }),
   cardContentContainer: {
     ...appStyles.flexCount(1),
     paddingVertical: 10,
@@ -293,16 +312,15 @@ const styles = StyleSheet.create({
     paddingRight: 10,
   },
   cardTitleRow: {
-    ...appStyles.flexRow,
     marginBottom: 5,
   },
   cardStatusRow: {
     ...appStyles.flexRow,
     justifyContent: 'flex-start',
   },
+  attachmentIcon: {height: 13},
   cardAmountRow: {
     ...appStyles.flexRow,
-    marginTop: 5,
   },
   sidebar: color => ({
     backgroundColor: color ? appColors.expenseStatus : appColors.incomeStatus,

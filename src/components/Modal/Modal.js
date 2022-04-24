@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   },
   modalContentContainer: {
     ...appStyles.containerBorderRadius(),
-    backgroundColor: appColors.cardBackground,
+    backgroundColor: appColors.white,
     width: '90%',
     justifyContent: 'center',
     alignItems: 'center',

@@ -119,8 +119,8 @@ const TransactionDetail = ({route}) => {
                   fontSize={22}
                   numericButtonBackgroundColor={appColors.white}
                   numericButtonColor={appColors.black}
-                  actionButtonBackgroundColor={appColors.inputBackground}
-                  actionButtonColor={appColors.background}
+                  actionButtonBackgroundColor={appColors.background}
+                  actionButtonColor={appColors.primary}
                   calcButtonBackgroundColor={appColors.primary}
                   acceptButtonBackgroundColor={appColors.primary}
                 />
@@ -323,6 +323,8 @@ const styles = StyleSheet.create({
     backgroundColor: appColors.inputBackground,
     marginTop: 5,
     ...appStyles.containerBorderRadius(),
+    borderWidth: 1,
+    borderColor: appColors.primary,
   },
   inputHeight: {height: 100},
   calculatorInputFieldContainer: {

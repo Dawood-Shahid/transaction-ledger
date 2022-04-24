@@ -8,6 +8,7 @@ export const TRANSACTION_DATA = [
     balance: '80000',
     amount: '80000',
     type: 'income',
+    attachment: [1, 2, 3, 4],
   },
   {
     id: 2,
@@ -18,6 +19,7 @@ export const TRANSACTION_DATA = [
     balance: '6000',
     amount: '9999',
     type: 'expense',
+    attachment: [1],
   },
   {
     id: 3,
@@ -28,6 +30,7 @@ export const TRANSACTION_DATA = [
     balance: '20000',
     amount: '999',
     type: 'expense',
+    attachment: [1, 2, 3],
   },
   {
     id: 4,
@@ -37,7 +40,8 @@ export const TRANSACTION_DATA = [
     paymentMethod: 'Cash',
     balance: '15000',
     amount: '999',
-    type: 'expense',
+    type: 'income',
+    attachment: [1, 2, 3, 4],
   },
   {
     id: 5,
@@ -48,6 +52,7 @@ export const TRANSACTION_DATA = [
     balance: '1000',
     amount: '999',
     type: 'expense',
+    attachment: [1],
   },
   {
     id: 6,
@@ -58,6 +63,7 @@ export const TRANSACTION_DATA = [
     balance: '1000',
     amount: '999',
     type: 'expense',
+    attachment: [1, 2, 3, 4],
   },
   {
     id: 7,
@@ -67,7 +73,8 @@ export const TRANSACTION_DATA = [
     paymentMethod: 'Cash',
     balance: '1000',
     amount: '999',
-    type: 'expense',
+    type: 'income',
+    attachment: [1, 2, 3, 4],
   },
 ];
 

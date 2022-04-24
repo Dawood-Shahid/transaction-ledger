@@ -83,7 +83,7 @@ const LedgerList = () => {
           <View style={styles.iconContainer}>
             <TouchableOpacity
               activeOpacity={0.7}
-              style={styles.icon}
+              style={styles.icon(appColors.incomeIconBackground)}
               onPress={() => ledgerEditHandler(item)}>
               <Icon
                 as={Feather}
@@ -94,7 +94,7 @@ const LedgerList = () => {
             </TouchableOpacity>
             <TouchableOpacity
               activeOpacity={0.5}
-              style={styles.icon}
+              style={styles.icon(appColors.expenseIconBackground)}
               onPress={() => ledgerDeleteHandler(item)}>
               <Icon
                 as={MaterialCommunityIcons}
@@ -116,13 +116,12 @@ const LedgerList = () => {
         title={'Rename Ledger'}
         onOutsideTap={cancelHandler}
         content={
-          <View my={4}>
+          <View my={4} style={styles.inputContainer}>
             <Input
               value={titleForEdit}
               onChangeText={text => setTitleForEdit(text)}
               size="md"
-              variant="filled"
-              backgroundColor={appColors.inputBackground}
+              variant="unstyled"
               width={'2xs'}
               pl={4}
               color={appColors.primary}
@@ -171,7 +170,7 @@ const LedgerList = () => {
               Are you sure, you want to delete{' '}
               <Text color={appColors.red} bold>
                 {selectedLedger.title}
-              </Text>{' '}
+              </Text>
               ?
             </Text>
           </View>
@@ -273,13 +272,15 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     ...appStyles.containerBorderRadius(),
+    borderWidth: 1,
+    borderColor: appColors.primary,
     backgroundColor: appColors.inputBackground,
-    height: 45,
+    height: 46,
     margin: 10,
   },
   addButton: {
     backgroundColor: appColors.primary,
-    height: '100%',
+    height: 44,
     width: '15%',
     alignItems: 'center',
     justifyContent: 'center',
@@ -287,7 +288,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     ...appStyles.flexRow,
     justifyContent: 'flex-start',
-    backgroundColor: appColors.cardBackground,
+    backgroundColor: appColors.white,
     marginVertical: 5,
     marginHorizontal: 10,
     ...appStyles.containerBorderRadius(),
@@ -312,10 +313,12 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 0,
     borderBottomLeftRadius: 0,
   },
-  icon: {
-    padding: 5,
+  icon: background => ({
+    padding: 12,
     marginHorizontal: 3,
-  },
+    backgroundColor: background,
+    ...appStyles.containerBorderRadius(100),
+  }),
   button: (background, right = false) => ({
     backgroundColor: background,
     paddingVertical: 12,
