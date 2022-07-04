@@ -1,10 +1,16 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {StyleSheet, StatusBar} from 'react-native';
+import {View} from 'native-base';
 import appColors from '../../color';
 import appStyles from '../../style';
 
 const PageContainer = ({children}) => {
-  return <View style={styles.container}>{children}</View>;
+  return (
+    <>
+      <StatusBar backgroundColor={appColors.primary} />
+      <View style={styles.container}>{children}</View>
+    </>
+  );
 };
 
 const styles = StyleSheet.create({

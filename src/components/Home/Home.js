@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import {
   SafeAreaView,
-  StatusBar,
   StyleSheet,
   VirtualizedList,
   Animated,
+  TouchableOpacity,
 } from 'react-native';
 import {View, Text, Icon} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
@@ -116,7 +116,9 @@ const Home = ({route}) => {
 
   const renderCard = ({item}) => {
     return (
-      <View
+      <TouchableOpacity
+        activeOpacity={0.9}
+        onPress={() => navigation.navigate('ViewTransaction')}
         style={styles.cardContainer(item.type === TRANSACTION_TYPE_EXPENSE)}>
         <View style={styles.cardContentContainer}>
           <View mb={1}>
@@ -170,7 +172,7 @@ const Home = ({route}) => {
           </View>
         </View>
         <View style={styles.sidebar(item.type === TRANSACTION_TYPE_EXPENSE)} />
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -238,12 +240,8 @@ const Home = ({route}) => {
 
   return (
     <PageContainer>
-      <StatusBar />
       <SafeAreaView style={appStyles.flexCount(1)}>
-        <Header
-          leftIcon={renderLeftIcon}
-          backHandler={() => navigation.goBack()}
-        />
+        <Header leftIcon={renderLeftIcon} />
         <View style={styles.mainContainer}>
           {renderCashDetailCard()}
           <View style={appStyles.flexCount(1)}>

@@ -108,7 +108,15 @@ export const ImagePicker = async cameraLaunch => {
         async response => {
           if (response?.assets?.length > 0) {
             let results = response.assets;
+            console.log(
+              '\n > file: appConstants.js > line 109 > response',
+              results,
+            );
             results = await resizeImages(results);
+            console.log(
+              '\n > file: appConstants.js > line 109 > response resize',
+              results,
+            );
             resolve(results);
           } else {
             reject([]);
