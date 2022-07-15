@@ -18,11 +18,12 @@ import {format} from 'date-fns';
 import PageContainer from '../PageContainer';
 import Header from '../Header';
 import ImagesPreviewModal from '../ImagePreviewModal/ImagePreviewModal';
-import appStyles from '../../style';
-import appColors from '../../color';
 import {ImagePicker, TRANSACTION_TYPE_EXPENSE} from '../../appConstants';
-import {Ionicons, MaterialIcons, Foundation} from '../Icons';
+
 import {CATEGORY, PAYMENT} from '../constants/transactionConstant';
+import {Ionicons, MaterialIcons} from '../../assets/Icons';
+import appColors from '../../color';
+import appStyles from '../../style';
 
 const TransactionDetail = ({route}) => {
   const navigation = useNavigation();
@@ -33,9 +34,9 @@ const TransactionDetail = ({route}) => {
   const [title, setTitle] = useState('');
   const [amount, setAmount] = useState(0);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [date, setDate] = useState(currentDate);
+  const [date, setDate] = useState(format(currentDate, 'dd-MM-Y'));
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const [time, setTime] = useState(currentDate);
+  const [time, setTime] = useState(format(currentDate, 'hh:mm a'));
   const [category, setCategory] = useState(
     navigationProps.type === TRANSACTION_TYPE_EXPENSE
       ? 'Labour Changes'
@@ -47,6 +48,8 @@ const TransactionDetail = ({route}) => {
   const [attachments, setAttachments] = useState([]);
   const [imageURls, setImageUrls] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  console.log('\n > file: TransactionDetail.js > line 37 > date', {date, time});
 
   useEffect(() => {
     let urls = attachments.map(attachment => {
@@ -152,39 +155,44 @@ const TransactionDetail = ({route}) => {
               </View>
             </View>
             <View style={styles.inputWrapper}>
-              <Text color={appColors.primary} py={1} bold>
-                Transaction Details
-              </Text>
               <View style={appStyles.flexRow}>
-                <View
-                  style={[styles.inputContainer, appStyles.flexCount(0.49)]}>
-                  <TouchableOpacity
-                    activeOpacity={0.7}
-                    style={styles.uploadImageContainer}
-                    onPress={() => setShowDatePicker(true)}>
-                    <Text>{format(date, 'dd-MM-Y')}</Text>
-                    <Icon
-                      as={Ionicons}
-                      name={'ios-calendar'}
-                      size={'4'}
-                      color={appColors.inputIconColor}
-                    />
-                  </TouchableOpacity>
+                <View style={appStyles.flexCount(0.49)}>
+                  <Text color={appColors.primary} py={1} bold>
+                    Date
+                  </Text>
+                  <View style={styles.inputContainer}>
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      style={styles.uploadImageContainer}
+                      onPress={() => setShowDatePicker(true)}>
+                      <Text>{date}</Text>
+                      <Icon
+                        as={Ionicons}
+                        name={'ios-calendar'}
+                        size={'4'}
+                        color={appColors.inputIconColor}
+                      />
+                    </TouchableOpacity>
+                  </View>
                 </View>
-                <View
-                  style={[styles.inputContainer, appStyles.flexCount(0.49)]}>
-                  <TouchableOpacity
-                    activeOpacity={0.7}
-                    style={styles.uploadImageContainer}
-                    onPress={() => setShowTimePicker(true)}>
-                    <Text>{time.toLocaleTimeString('en-US')}</Text>
-                    <Icon
-                      as={Ionicons}
-                      name={'time-outline'}
-                      size={'5'}
-                      color={appColors.inputIconColor}
-                    />
-                  </TouchableOpacity>
+                <View style={appStyles.flexCount(0.49)}>
+                  <Text color={appColors.primary} py={1} bold>
+                    Time
+                  </Text>
+                  <View style={styles.inputContainer}>
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      style={styles.uploadImageContainer}
+                      onPress={() => setShowTimePicker(true)}>
+                      <Text>{time}</Text>
+                      <Icon
+                        as={Ionicons}
+                        name={'time-outline'}
+                        size={'5'}
+                        color={appColors.inputIconColor}
+                      />
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
             </View>
@@ -327,19 +335,16 @@ const TransactionDetail = ({route}) => {
           )}
           {showDatePicker && (
             <DateTimePicker
-              // testID="dateTimePicker"
-              value={new Date()}
+              value={date}
               mode={'date'}
               is24Hour={true}
               onChange={(event, selectedDate) => {
                 console.log(
-                  '\n > file: TransactionDetail.js > line 163 > event',
+                  '\n > file: TransactionDetail.js > line 163 > date',
                   {event, selectedDate},
                 );
                 setShowDatePicker(false);
-                // const currentDate = selectedDate;
-                // setShow(false);
-                // setDate(currentDate);
+                setDate(format(selectedDate, 'dd-MM-Y'));
               }}
             />
           )}
@@ -348,15 +353,13 @@ const TransactionDetail = ({route}) => {
               value={new Date()}
               mode={'time'}
               is24Hour={false}
-              onChange={(event, selectedDate) => {
+              onChange={(event, selectedTime) => {
                 console.log(
-                  '\n > file: TransactionDetail.js > line 163 > event',
-                  {event, selectedDate},
+                  '\n > file: TransactionDetail.js > line 163 > time',
+                  {event, selectedTime},
                 );
                 setShowTimePicker(false);
-                // const currentDate = selectedDate;
-                // setShow(false);
-                // setDate(currentDate);
+                setTime(format(selectedTime, 'hh:mm a'));
               }}
             />
           )}
@@ -399,7 +402,7 @@ const styles = StyleSheet.create({
   },
   inputWrapper: {marginTop: 15},
   inputContainer: {
-    backgroundColor: appColors.inputBackground,
+    backgroundColor: appColors.white,
     marginTop: 5,
     ...appStyles.containerBorderRadius(),
     borderWidth: 1,

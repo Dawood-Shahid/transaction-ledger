@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, StatusBar} from 'react-native';
 import {View} from 'native-base';
+
 import appColors from '../../color';
 import appStyles from '../../style';
 

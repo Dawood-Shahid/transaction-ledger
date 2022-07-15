@@ -2,7 +2,8 @@ import React from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {View, Text, Icon} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
-import {Feather} from '../Icons';
+
+import {Feather} from '../../assets/Icons';
 import appColors from '../../color';
 
 const Header = ({

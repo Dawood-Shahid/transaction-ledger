@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
 import {Text} from 'native-base';
+
 import appStyles from '../../style';
 
 const StatusTags = ({text, color, background}) => {

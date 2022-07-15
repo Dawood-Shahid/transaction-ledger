@@ -7,13 +7,16 @@ import {
 } from 'react-native';
 import {View, Text, Input, Icon} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
+
 import PageContainer from '../PageContainer';
-import appStyles from '../../style';
 import Header from '../Header';
-import {Feather, Ionicons, MaterialCommunityIcons} from '../Icons';
-import appColors from '../../color';
-import {LEDGER_DATA} from '../constants/transactionConstant';
 import Modal from '../Modal';
+import InputField from '../InputField/InputField';
+
+import {LEDGER_DATA} from '../constants/transactionConstant';
+import {Feather, Ionicons, MaterialCommunityIcons} from '../../assets/Icons';
+import appStyles from '../../style';
+import appColors from '../../color';
 
 const LedgerList = () => {
   const navigation = useNavigation();
@@ -61,19 +64,17 @@ const LedgerList = () => {
         activeOpacity={0.9}
         onPress={() => navigationHandler(item)}
         style={styles.cardContainer}>
+        <View style={styles.sidebar} />
         <View style={styles.cardContentContainer}>
           <View style={styles.cardTitleRow}>
-            <Text
-              fontSize={'lg'}
-              bold
-              noOfLines={2}
-              width={250}
-              color={appColors.primary}>
+            <Text fontSize={'lg'} bold width={250} color={appColors.primary}>
               {item.title}
             </Text>
-            <Text fontSize={'sm'} color={appColors.text}>
-              {item.createdAt}
-            </Text>
+            <View style={styles.createdAt}>
+              <Text fontSize={'sm'} color={appColors.primary}>
+                {item.createdAt}
+              </Text>
+            </View>
           </View>
           <View my={'1'}>
             <Text fontSize={'md'} color={appColors.text}>
@@ -83,7 +84,10 @@ const LedgerList = () => {
           <View style={styles.iconContainer}>
             <TouchableOpacity
               activeOpacity={0.7}
-              style={styles.icon(appColors.incomeIconBackground)}
+              style={styles.icon(
+                appColors.incomeIconBackground,
+                appColors.green,
+              )}
               onPress={() => ledgerEditHandler(item)}>
               <Icon
                 as={Feather}
@@ -94,7 +98,10 @@ const LedgerList = () => {
             </TouchableOpacity>
             <TouchableOpacity
               activeOpacity={0.5}
-              style={styles.icon(appColors.expenseIconBackground)}
+              style={styles.icon(
+                appColors.expenseIconBackground,
+                appColors.red,
+              )}
               onPress={() => ledgerDeleteHandler(item)}>
               <Icon
                 as={MaterialCommunityIcons}
@@ -105,7 +112,6 @@ const LedgerList = () => {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.sidebar} />
       </TouchableOpacity>
     );
   };
@@ -209,30 +215,24 @@ const LedgerList = () => {
   return (
     <PageContainer>
       <SafeAreaView style={appStyles.flexCount(1)}>
-        <Header showLeftIcon={false} title={'Transaction Ledgers'} />
         <View style={styles.mainContainer}>
-          <View style={styles.inputContainer}>
-            <Input
+          <View style={styles.headerInputContainer}>
+            <Header showLeftIcon={false} title={'Transaction Ledgers'} />
+            <InputField
               value={title}
-              onChangeText={text => setTitle(text)}
-              size="lg"
-              variant="unstyled"
-              ml={2}
-              placeholder="Add Ledger Name"
-              placeholderTextColor={appColors.primary}
-              color={appColors.primary}
+              setValue={setTitle}
               rightElement={
                 <TouchableOpacity
                   activeOpacity={0.9}
                   onPress={() =>
-                    console.log(`\nOpen modal for add new ledger\n`)
+                    console.log(`\nOpen modal for add new ledger\n`, title)
                   }
                   style={styles.addButton}>
                   <Icon
                     as={Ionicons}
                     name={'md-add'}
                     size={'6'}
-                    color={appColors.white}
+                    color={appColors.primary}
                   />
                 </TouchableOpacity>
               }
@@ -257,7 +257,6 @@ const LedgerList = () => {
               </Text>
             )}
           </View>
-          <Text>{selectedLedger.title}</Text>
           {showEditModal && renderEditModal()}
           {showDeleteModal && renderDeleteModal()}
         </View>
@@ -270,17 +269,24 @@ const styles = StyleSheet.create({
   mainContainer: {
     ...appStyles.flexCount(1),
   },
+  headerInputContainer: {
+    backgroundColor: appColors.primary,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    marginBottom: 5,
+  },
   inputContainer: {
     ...appStyles.containerBorderRadius(),
     borderWidth: 1,
     borderColor: appColors.primary,
-    backgroundColor: appColors.inputBackground,
+    backgroundColor: appColors.white,
     height: 46,
     margin: 10,
   },
   addButton: {
-    backgroundColor: appColors.primary,
-    height: 44,
+    ...appStyles.containerBorderRadius(),
+    backgroundColor: appColors.secondary,
+    height: 43,
     width: '15%',
     alignItems: 'center',
     justifyContent: 'center',
@@ -293,30 +299,41 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     ...appStyles.containerBorderRadius(),
     ...appStyles.boxShadow,
+    overflow: 'hidden',
+  },
+  sidebar: {
+    backgroundColor: appColors.primary,
+    width: 10,
+    height: '100%',
   },
   cardContentContainer: {
     ...appStyles.flexCount(1),
-    paddingVertical: 10,
-    paddingLeft: 20,
-    paddingRight: 10,
+    paddingBottom: 10,
+    paddingLeft: 10,
   },
   cardTitleRow: {
     ...appStyles.flexRow,
     marginBottom: 5,
   },
-  iconContainer: {...appStyles.flexRow, justifyContent: 'flex-end'},
-  sidebar: {
-    backgroundColor: appColors.primary,
-    width: 10,
-    height: '100%',
-    ...appStyles.containerBorderRadius(),
-    borderTopLeftRadius: 0,
-    borderBottomLeftRadius: 0,
+  createdAt: {
+    backgroundColor: appColors.secondary,
+    height: 30,
+    width: 90,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomLeftRadius: 8,
   },
-  icon: background => ({
+  iconContainer: {
+    ...appStyles.flexRow,
+    justifyContent: 'flex-end',
+    paddingRight: 15,
+  },
+  icon: (backgroundColor, color) => ({
     padding: 12,
-    marginHorizontal: 3,
-    backgroundColor: background,
+    marginHorizontal: 5,
+    backgroundColor: backgroundColor,
+    borderWidth: 1,
+    borderColor: color,
     ...appStyles.containerBorderRadius(100),
   }),
   button: (background, right = false) => ({

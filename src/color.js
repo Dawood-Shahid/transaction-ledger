@@ -1,7 +1,8 @@
 const appColors = {
   white: '#FFFFFF',
   black: '#000000',
-  primary: '#03045E',
+  primary: '#242529',
+  secondary: '#dad1c1',
   gradient2: '#60efff',
   red: '#C11F1F',
   expenseStatus: '#AF1D1D',
@@ -13,7 +14,7 @@ const appColors = {
   incomeBackground: '#F8FFF9',
   text: '#011C3D',
   subText: '#002E66',
-  background: '#EBF3FF',
+  background: '#F5F5F5',
   inputBackground: '#ebf4f5',
   inputIconColor: '#999999',
   cardBackground: '#EBF3FF',
