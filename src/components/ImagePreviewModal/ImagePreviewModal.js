@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
-import {Modal, TouchableOpacity, StyleSheet, Dimensions} from 'react-native';
+import {Modal, TouchableOpacity, StyleSheet} from 'react-native';
 import {Icon, Text, View} from 'native-base';
 import ImageViewer from 'react-native-image-zoom-viewer';
+
+import {Feather} from '../../assets/Icons';
 import appColors from '../../color';
-import {Feather} from '../Icons';
 import appStyles from '../../style';
 
 const ImagesPreviewModal = ({
@@ -12,9 +13,6 @@ const ImagesPreviewModal = ({
   imageUrls,
   selectedImageIndex,
 }) => {
-  // const [showCaption, setShowCaption] = useState(true);
-  // const [showFullText, setShowFullText] = useState(false);
-  // const isArabic = I18n.currentLocale() === 'ar';
   const [currentImageIndex, setCurrentImageIndex] = useState(
     selectedImageIndex + 1,
   );

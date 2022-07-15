@@ -1,4 +1,5 @@
-import {StyleSheet, StatusBar, Platform} from 'react-native';
+import {StyleSheet} from 'react-native';
+
 import appColors from './color';
 // import {getBookingStatusColor} from '../constants/Booking';
 // import appColors from './colors';

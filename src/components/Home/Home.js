@@ -11,13 +11,17 @@ import {useNavigation} from '@react-navigation/native';
 import PageContainer from '../PageContainer';
 import Header from '../Header';
 import FloatButton from '../FloatButton';
-import {MaterialCommunityIcons, Entypo, Ionicons, AntDesign} from '../Icons';
+import {
+  MaterialCommunityIcons,
+  Entypo,
+  Ionicons,
+  AntDesign,
+} from '../../assets/Icons';
 import {TRANSACTION_DATA} from '../constants/transactionConstant';
 import StatusTags from '../StatusTags';
 import {numberFormatter, TRANSACTION_TYPE_EXPENSE} from '../../appConstants';
 import appColors from '../../color';
 import appStyles from '../../style';
-import LinearGradient from 'react-native-linear-gradient';
 
 const ANIMATED_Value = new Animated.Value(0);
 
@@ -72,12 +76,13 @@ const Home = ({route}) => {
 
   const renderCashDetailCard = () => {
     return (
-      <LinearGradient
-        colors={['#103783', appColors.gradient2]}
-        useAngle={true}
-        angle={45}
-        angleCenter={{x: 0, y: 0}}
-        style={styles.cashDetails}>
+      // <LinearGradient
+      //   colors={['#103783', appColors.gradient2]}
+      //   useAngle={true}
+      //   angle={45}
+      //   angleCenter={{x: 0, y: 0}}
+      //   style={styles.cashDetails}>
+      <View style={styles.cashDetails}>
         <View style={styles.cashDetailRow}>
           <Text color={appColors.text} bold lineHeight={'2xl'}>
             Cash In
@@ -110,7 +115,8 @@ const Home = ({route}) => {
             {numberFormatter('35000')}
           </Text>
         </View>
-      </LinearGradient>
+      </View>
+      // </LinearGradient>
     );
   };
 
@@ -243,25 +249,27 @@ const Home = ({route}) => {
       <SafeAreaView style={appStyles.flexCount(1)}>
         <Header leftIcon={renderLeftIcon} />
         <View style={styles.mainContainer}>
-          {renderCashDetailCard()}
-          <View style={appStyles.flexCount(1)}>
-            {true ? (
-              <VirtualizedList
-                data={TRANSACTION_DATA}
-                renderItem={renderCard}
-                keyExtractor={(item, index) => `${item.text}-${index}`}
-                getItemCount={() => TRANSACTION_DATA.length}
-                getItem={(data, index) => ({id: index, ...data[index]})}
-              />
-            ) : (
-              <Text
-                color={appColors.primary}
-                width="100%"
-                textAlign={'center'}
-                lineHeight={'3xl'}>
-                No Transaction Details
-              </Text>
-            )}
+          <View style={[appStyles.flexCount(1), styles.contentContainer]}>
+            {renderCashDetailCard()}
+            <View style={[appStyles.flexCount(1), styles.listWrapper]}>
+              {true ? (
+                <VirtualizedList
+                  data={TRANSACTION_DATA}
+                  renderItem={renderCard}
+                  keyExtractor={(item, index) => `${item.text}-${index}`}
+                  getItemCount={() => TRANSACTION_DATA.length}
+                  getItem={(data, index) => ({id: index, ...data[index]})}
+                />
+              ) : (
+                <Text
+                  color={appColors.primary}
+                  width="100%"
+                  textAlign={'center'}
+                  lineHeight={'3xl'}>
+                  No Transaction Details
+                </Text>
+              )}
+            </View>
           </View>
           {renderFloatButtonWithAnimation()}
         </View>
@@ -275,8 +283,19 @@ const styles = StyleSheet.create({
     ...appStyles.flexCount(1),
     position: 'relative',
   },
+  contentContainer: {
+    backgroundColor: appColors.primary,
+    marginTop: 10,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+  },
+  listWrapper: {
+    backgroundColor: appColors.background,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+  },
   cashDetails: {
-    // backgroundColor: appColors.cardBackground,
+    backgroundColor: appColors.secondary,
     paddingVertical: 10,
     margin: 10,
     ...appStyles.containerBorderRadius(),
