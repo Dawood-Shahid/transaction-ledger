@@ -10,7 +10,8 @@ const StatusTags = ({text, color, background}) => {
       fontSize={'2xs'}
       px={2}
       py={0.5}
-      m={1}
+      mr={1}
+      my={1}
       bold
       borderWidth={0.6}
       borderColor={color}

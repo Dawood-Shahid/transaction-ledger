@@ -67,16 +67,21 @@ const LedgerList = () => {
         <View style={styles.sidebar} />
         <View style={styles.cardContentContainer}>
           <View style={styles.cardTitleRow}>
-            <Text fontSize={'lg'} bold width={250} color={appColors.primary}>
+            <Text
+              fontSize={'lg'}
+              bold
+              noOfLines={1}
+              width={250}
+              color={appColors.primary}>
               {item.title}
             </Text>
             <View style={styles.createdAt}>
-              <Text fontSize={'sm'} color={appColors.primary}>
+              <Text fontSize={'sm'} bold color={appColors.text}>
                 {item.createdAt}
               </Text>
             </View>
           </View>
-          <View my={'1'}>
+          <View mb={'1'}>
             <Text fontSize={'md'} color={appColors.text}>
               Net Balance: {item.netBalance}
             </Text>
@@ -84,10 +89,7 @@ const LedgerList = () => {
           <View style={styles.iconContainer}>
             <TouchableOpacity
               activeOpacity={0.7}
-              style={styles.icon(
-                appColors.incomeIconBackground,
-                appColors.green,
-              )}
+              style={styles.icon(appColors.greenBackground, appColors.green)}
               onPress={() => ledgerEditHandler(item)}>
               <Icon
                 as={Feather}
@@ -98,10 +100,7 @@ const LedgerList = () => {
             </TouchableOpacity>
             <TouchableOpacity
               activeOpacity={0.5}
-              style={styles.icon(
-                appColors.expenseIconBackground,
-                appColors.red,
-              )}
+              style={styles.icon(appColors.redBackground, appColors.red)}
               onPress={() => ledgerDeleteHandler(item)}>
               <Icon
                 as={MaterialCommunityIcons}
@@ -130,7 +129,7 @@ const LedgerList = () => {
               variant="unstyled"
               width={'2xs'}
               pl={4}
-              color={appColors.primary}
+              color={appColors.black}
             />
           </View>
         }
@@ -139,7 +138,7 @@ const LedgerList = () => {
             <TouchableOpacity
               activeOpacity={0.9}
               onPress={updateHandler}
-              style={styles.button(appColors.incomeStatus)}>
+              style={styles.button(appColors.green)}>
               <Text
                 color={appColors.white}
                 textTransform={'uppercase'}
@@ -151,7 +150,7 @@ const LedgerList = () => {
             <TouchableOpacity
               activeOpacity={0.9}
               onPress={cancelHandler}
-              style={styles.button(appColors.expenseStatus, true)}>
+              style={styles.button(appColors.red, true)}>
               <Text
                 color={appColors.white}
                 textTransform={'uppercase'}
@@ -186,7 +185,7 @@ const LedgerList = () => {
             <TouchableOpacity
               activeOpacity={0.9}
               onPress={deleteHandler}
-              style={styles.button(appColors.expenseStatus)}>
+              style={styles.button(appColors.red)}>
               <Text
                 color={appColors.white}
                 textTransform={'uppercase'}
@@ -198,7 +197,7 @@ const LedgerList = () => {
             <TouchableOpacity
               activeOpacity={0.9}
               onPress={cancelHandler}
-              style={styles.button(appColors.incomeStatus, true)}>
+              style={styles.button(appColors.green, true)}>
               <Text
                 color={appColors.white}
                 textTransform={'uppercase'}
@@ -221,6 +220,8 @@ const LedgerList = () => {
             <InputField
               value={title}
               setValue={setTitle}
+              placeholder={'Add Ledger Name'}
+              customStyles={styles.inputCustomStyles}
               rightElement={
                 <TouchableOpacity
                   activeOpacity={0.9}
@@ -274,6 +275,9 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
     marginBottom: 5,
+  },
+  inputCustomStyles: {
+    margin: 10,
   },
   inputContainer: {
     ...appStyles.containerBorderRadius(),
