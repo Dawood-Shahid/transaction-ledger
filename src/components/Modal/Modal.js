@@ -12,7 +12,7 @@ const Modal = ({title, content, buttons, onOutsideTap}) => {
       onPress={onOutsideTap}
       style={styles.modalWrapper}>
       <View style={styles.modalContentContainer}>
-        <Text fontSize={'lg'} bold color={appColors.primary}>
+        <Text fontSize={'lg'} bold color={appColors.black}>
           {title}
         </Text>
         <View>{content && content}</View>

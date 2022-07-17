@@ -2,7 +2,7 @@ export const TRANSACTION_DATA = [
   {
     id: 1,
     title: 'Monthly Income',
-    createdAt: '10:30 am',
+    createdAt: '15-07-2022',
     category: 'Salary',
     paymentMethod: 'Online',
     balance: '80000',
@@ -13,7 +13,7 @@ export const TRANSACTION_DATA = [
   {
     id: 2,
     title: 'Utility',
-    createdAt: '10:30 am',
+    createdAt: '15-07-2022',
     category: 'Bills',
     paymentMethod: 'Cash',
     balance: '6000',
@@ -24,7 +24,7 @@ export const TRANSACTION_DATA = [
   {
     id: 3,
     title: 'Grocery Items',
-    createdAt: '10:30 am',
+    createdAt: '15-07-2022',
     category: 'Grocery',
     paymentMethod: 'Cash',
     balance: '20000',
@@ -35,7 +35,7 @@ export const TRANSACTION_DATA = [
   {
     id: 4,
     title: 'Car Instalment',
-    createdAt: '10:30 am',
+    createdAt: '15-07-2022',
     category: 'Rent',
     paymentMethod: 'Cash',
     balance: '15000',
@@ -46,7 +46,7 @@ export const TRANSACTION_DATA = [
   {
     id: 5,
     title: 'School Fee',
-    createdAt: '10:30 am',
+    createdAt: '15-07-2022',
     category: 'Utility',
     paymentMethod: 'Cash',
     balance: '1000',
@@ -57,7 +57,7 @@ export const TRANSACTION_DATA = [
   {
     id: 6,
     title: 'Doctor Fee',
-    createdAt: '10:30 am',
+    createdAt: '15-07-2022',
     category: 'Health',
     paymentMethod: 'Cash',
     balance: '1000',
@@ -68,7 +68,7 @@ export const TRANSACTION_DATA = [
   {
     id: 7,
     title: 'Medicines',
-    createdAt: '10:30 am',
+    createdAt: '15-07-2022',
     category: 'Health',
     paymentMethod: 'Cash',
     balance: '1000',

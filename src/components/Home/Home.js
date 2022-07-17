@@ -76,12 +76,6 @@ const Home = ({route}) => {
 
   const renderCashDetailCard = () => {
     return (
-      // <LinearGradient
-      //   colors={['#103783', appColors.gradient2]}
-      //   useAngle={true}
-      //   angle={45}
-      //   angleCenter={{x: 0, y: 0}}
-      //   style={styles.cashDetails}>
       <View style={styles.cashDetails}>
         <View style={styles.cashDetailRow}>
           <Text color={appColors.text} bold lineHeight={'2xl'}>
@@ -116,7 +110,6 @@ const Home = ({route}) => {
           </Text>
         </View>
       </View>
-      // </LinearGradient>
     );
   };
 
@@ -125,17 +118,29 @@ const Home = ({route}) => {
       <TouchableOpacity
         activeOpacity={0.9}
         onPress={() => navigation.navigate('ViewTransaction')}
-        style={styles.cardContainer(item.type === TRANSACTION_TYPE_EXPENSE)}>
+        style={styles.cardContainer}>
+        <View style={styles.sidebar} />
         <View style={styles.cardContentContainer}>
-          <View mb={1}>
-            <Text noOfLines={2} bold color={appColors.primary}>
+          <View mb={1} style={styles.cardTitleRow}>
+            <Text noOfLines={1} bold color={appColors.primary} width={270}>
               {item.title}
             </Text>
+            <View
+              style={styles.cardStatus(
+                item.type === TRANSACTION_TYPE_EXPENSE
+                  ? appColors.red
+                  : appColors.green,
+              )}>
+              <Text
+                fontSize={'sm'}
+                bold
+                textTransform={'capitalize'}
+                color={appColors.white}>
+                {item.type}
+              </Text>
+            </View>
           </View>
           <View style={appStyles.flexRow}>
-            <Text color={appColors.text}>
-              Transaction Date: {item.createdAt}
-            </Text>
             <View style={styles.cardStatusRow}>
               <StatusTags
                 text={item.paymentMethod}
@@ -150,19 +155,24 @@ const Home = ({route}) => {
                 />
               )}
             </View>
+            <Text color={appColors.text} fontSize={'xs'} mr={3}>
+              {item.createdAt}
+            </Text>
           </View>
-          <View style={styles.cardStatusRow}>
+          <View my={0.5} style={styles.cardStatusRow}>
             <Icon
               as={Entypo}
               name={'attachment'}
               size={'3'}
-              color={appColors.primary}
+              color={appColors.black}
               style={styles.attachmentIcon}
             />
-            <Text m={1}>Attachment{item.attachment.length > 1 && 's'}</Text>
+            <Text color={appColors.text}>
+              Attachment{item.attachment.length > 1 && 's'}
+            </Text>
           </View>
           <View style={styles.cardAmountRow}>
-            <Text fontSize={'xs'} color={appColors.subText}>
+            <Text fontSize={'xs'} color={appColors.text}>
               Balance: {numberFormatter(item.balance)}
             </Text>
             <Text
@@ -172,12 +182,11 @@ const Home = ({route}) => {
                   : appColors.green
               }
               bold
-              lineHeight={'2xl'}>
+              mr={3}>
               {numberFormatter(item.amount)}
             </Text>
           </View>
         </View>
-        <View style={styles.sidebar(item.type === TRANSACTION_TYPE_EXPENSE)} />
       </TouchableOpacity>
     );
   };
@@ -311,42 +320,47 @@ const styles = StyleSheet.create({
     borderTopWidth: 0.5,
     borderTopColor: appColors.primary,
   },
-  cardContainer: background => ({
+  cardContainer: {
     ...appStyles.flexRow,
     justifyContent: 'flex-start',
-    backgroundColor: background
-      ? appColors.expenseBackground
-      : appColors.incomeBackground,
+    backgroundColor: appColors.white,
     marginVertical: 5,
     marginHorizontal: 10,
     ...appStyles.containerBorderRadius(),
     ...appStyles.boxShadow,
-  }),
+    overflow: 'hidden',
+  },
+  sidebar: {
+    backgroundColor: appColors.primary,
+    width: 10,
+    height: '100%',
+  },
   cardContentContainer: {
     ...appStyles.flexCount(1),
-    paddingVertical: 10,
-    paddingLeft: 20,
-    paddingRight: 10,
+    paddingBottom: 10,
+    paddingLeft: 10,
+    paddingRight: 0,
   },
   cardTitleRow: {
+    ...appStyles.flexRow,
     marginBottom: 5,
   },
+  cardStatus: bg => ({
+    backgroundColor: bg,
+    height: 28,
+    width: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomLeftRadius: 8,
+  }),
   cardStatusRow: {
     ...appStyles.flexRow,
     justifyContent: 'flex-start',
   },
-  attachmentIcon: {height: 13},
+  attachmentIcon: {height: 13, fontSize: 10},
   cardAmountRow: {
     ...appStyles.flexRow,
   },
-  sidebar: color => ({
-    backgroundColor: color ? appColors.expenseStatus : appColors.incomeStatus,
-    width: 10,
-    height: '100%',
-    ...appStyles.containerBorderRadius(),
-    borderTopLeftRadius: 0,
-    borderBottomLeftRadius: 0,
-  }),
   transactionButton: {
     position: 'absolute',
     bottom: 40,

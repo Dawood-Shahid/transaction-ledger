@@ -1,7 +1,7 @@
 import React from 'react';
 import {NativeBaseProvider} from 'native-base';
 import {NavigationContainer} from '@react-navigation/native';
-\
+
 import StackNavigator from './components/StackNavigator';
 
 import {LogBox} from 'react-native';

@@ -1,24 +1,43 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
-import {View, Input} from 'native-base';
+import {View, Text, Input} from 'native-base';
 
 import appStyles from '../../style';
 import appColors from '../../color';
 
-const InputField = ({value, setValue, rightElement = null}) => {
+const InputField = ({
+  value,
+  setValue,
+  placeholder = null,
+  label = null,
+  rightElement = null,
+  customStyles = {},
+  otherInputField = null,
+}) => {
   return (
-    <View style={styles.inputContainer}>
-      <Input
-        value={value}
-        onChangeText={text => setValue(text)}
-        size="lg"
-        variant="unstyled"
-        ml={2}
-        placeholder="Add Ledger Name"
-        placeholderTextColor={appColors.primary}
-        color={appColors.primary}
-        rightElement={rightElement}
-      />
+    <View>
+      {label && (
+        <Text color={appColors.black} py={1} bold>
+          {label}
+        </Text>
+      )}
+      <View style={[styles.inputContainer, customStyles]}>
+        {!otherInputField ? (
+          <Input
+            value={value}
+            onChangeText={text => setValue(text)}
+            size="lg"
+            variant="unstyled"
+            ml={2}
+            placeholder={placeholder}
+            placeholderTextColor={appColors.black}
+            color={appColors.black}
+            rightElement={rightElement}
+          />
+        ) : (
+          <>{otherInputField}</>
+        )}
+      </View>
     </View>
   );
 };
@@ -30,7 +49,6 @@ const styles = StyleSheet.create({
     borderColor: appColors.primary,
     backgroundColor: appColors.white,
     height: 46,
-    margin: 10,
   },
 });
 
