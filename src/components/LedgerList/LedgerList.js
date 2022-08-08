@@ -13,8 +13,13 @@ import Header from '../Header';
 import Modal from '../Modal';
 import InputField from '../InputField/InputField';
 
+import {numberFormatter} from '../../core/helper/HelperFunctions';
 import {LEDGER_DATA} from '../constants/transactionConstant';
-import {Feather, Ionicons, MaterialCommunityIcons} from '../../assets/Icons';
+import {
+  Feather,
+  Ionicons,
+  MaterialCommunityIcons,
+} from '../../assets/vectorIcons';
 import appStyles from '../../style';
 import appColors from '../../color';
 
@@ -72,6 +77,7 @@ const LedgerList = () => {
               bold
               noOfLines={1}
               width={250}
+              mb={-1}
               color={appColors.primary}>
               {item.title}
             </Text>
@@ -83,7 +89,7 @@ const LedgerList = () => {
           </View>
           <View mb={'1'}>
             <Text fontSize={'md'} color={appColors.text}>
-              Net Balance: {item.netBalance}
+              Net Balance: {numberFormatter(item.netBalance)}
             </Text>
           </View>
           <View style={styles.iconContainer}>
@@ -281,7 +287,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     ...appStyles.containerBorderRadius(),
-    borderWidth: 1,
+    borderWidth: 0.75,
     borderColor: appColors.primary,
     backgroundColor: appColors.white,
     height: 46,
@@ -290,7 +296,7 @@ const styles = StyleSheet.create({
   addButton: {
     ...appStyles.containerBorderRadius(),
     backgroundColor: appColors.secondary,
-    height: 43,
+    height: 44,
     width: '15%',
     alignItems: 'center',
     justifyContent: 'center',
@@ -317,6 +323,7 @@ const styles = StyleSheet.create({
   },
   cardTitleRow: {
     ...appStyles.flexRow,
+    alignItems: 'flex-end',
     marginBottom: 5,
   },
   createdAt: {

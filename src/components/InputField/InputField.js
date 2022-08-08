@@ -45,7 +45,7 @@ const InputField = ({
 const styles = StyleSheet.create({
   inputContainer: {
     ...appStyles.containerBorderRadius(),
-    borderWidth: 1.5,
+    borderWidth: 0.75,
     borderColor: appColors.primary,
     backgroundColor: appColors.white,
     height: 46,

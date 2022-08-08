@@ -4,7 +4,6 @@ import {createStackNavigator} from '@react-navigation/stack';
 import LedgerList from '../LedgerList';
 import Home from '../Home';
 import TransactionDetail from '../TransactionDetail';
-import ViewTransaction from '../ViewTransaction';
 
 const StackNavigator = () => {
   const Stack = createStackNavigator();
@@ -23,11 +22,6 @@ const StackNavigator = () => {
       <Stack.Screen
         name="TransactionDetail"
         component={TransactionDetail}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="ViewTransaction"
-        component={ViewTransaction}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

@@ -18,13 +18,14 @@ import {format} from 'date-fns';
 import PageContainer from '../PageContainer';
 import Header from '../Header';
 import ImagesPreviewModal from '../ImagePreviewModal/ImagePreviewModal';
-import {ImagePicker, TRANSACTION_TYPE_EXPENSE} from '../../appConstants';
+import InputField from '../InputField/InputField';
 
+import {ImagePicker} from '../../core/helper/FileSystemManager';
+import {TRANSACTION_TYPE_EXPENSE} from '../../appConstants';
 import {CATEGORY, PAYMENT} from '../constants/transactionConstant';
-import {Ionicons, MaterialIcons} from '../../assets/Icons';
+import {Ionicons, MaterialIcons} from '../../assets/vectorIcons';
 import appColors from '../../color';
 import appStyles from '../../style';
-import InputField from '../InputField/InputField';
 
 const TransactionDetail = ({route}) => {
   const navigation = useNavigation();
@@ -72,8 +73,21 @@ const TransactionDetail = ({route}) => {
   };
 
   const saveHandler = (addNew = false) => {
-    setAmount(0);
+    console.log(`\nSave transaction\n`, {
+      title,
+      amount,
+      date,
+      time,
+      // date: format(date, 'dd-MM-Y'),
+      // time: format(time, 'hh:mm a'),
+      category,
+      payment,
+      attachments,
+    });
     setTitle('');
+    setAmount(0);
+    setDate(currentDate);
+    setTime(currentDate);
     setCategory(
       navigationProps.type === TRANSACTION_TYPE_EXPENSE
         ? 'Labour Changes'
@@ -304,7 +318,7 @@ const TransactionDetail = ({route}) => {
                         as={MaterialIcons}
                         name="cancel"
                         size={4}
-                        style={styles.cancelIcon}
+                        color={appColors.primary}
                       />
                     </TouchableOpacity>
                     <Image
@@ -335,10 +349,6 @@ const TransactionDetail = ({route}) => {
               mode={'date'}
               is24Hour={true}
               onChange={(event, selectedDate) => {
-                console.log(
-                  '\n > file: TransactionDetail.js > line 163 > date',
-                  {event, selectedDate},
-                );
                 setShowDatePicker(false);
                 setDate(selectedDate);
               }}
@@ -350,10 +360,6 @@ const TransactionDetail = ({route}) => {
               mode={'time'}
               is24Hour={false}
               onChange={(event, selectedTime) => {
-                console.log(
-                  '\n > file: TransactionDetail.js > line 163 > time',
-                  {event, selectedTime},
-                );
                 setShowTimePicker(false);
                 setTime(selectedTime);
               }}
@@ -411,18 +417,20 @@ const styles = StyleSheet.create({
   imageContainer: {
     ...appStyles.flexCount(1),
     marginVertical: 5,
-    paddingVertical: 3,
-    paddingHorizontal: 4,
+    width: 346,
     flexDirection: 'row',
     flexWrap: 'wrap',
+    alignSelf: 'center',
   },
   imageWrapper: {
     position: 'relative',
     overflow: 'hidden',
     margin: 2,
-    borderWidth: 1,
+    borderWidth: 0.75,
     borderColor: appColors.primary,
     ...appStyles.containerBorderRadius(),
+    height: 65,
+    width: 65,
   },
   image: {
     height: 65,
@@ -442,9 +450,6 @@ const styles = StyleSheet.create({
     zIndex: -1,
     backgroundColor: appColors.white,
     borderRadius: 100,
-  },
-  cancelIcon: {
-    color: appColors.primary,
   },
   button: (right = false) => ({
     backgroundColor: appColors.primary,
