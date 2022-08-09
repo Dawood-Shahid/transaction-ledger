@@ -1,8 +1,10 @@
 import React from 'react';
 import {NativeBaseProvider} from 'native-base';
 import {NavigationContainer} from '@react-navigation/native';
+import {Provider} from 'react-redux';
 
 import StackNavigator from './components/StackNavigator';
+import {store} from './store/app.store';
 
 import {LogBox} from 'react-native';
 
@@ -14,7 +16,9 @@ const App = () => {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-        <StackNavigator />
+        <Provider store={store}>
+          <StackNavigator />
+        </Provider>
       </NavigationContainer>
     </NativeBaseProvider>
   );

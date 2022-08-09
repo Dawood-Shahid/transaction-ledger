@@ -7,8 +7,8 @@ import StatusTags from '../StatusTags';
 import {Entypo, Ionicons} from '../../assets/vectorIcons';
 import {numberFormatter} from '../../core/helper/HelperFunctions';
 import {TRANSACTION_TYPE_EXPENSE} from '../../appConstants';
-import appStyles from '../../style';
-import appColors from '../../color';
+import appStyles from '../../styles/style';
+import appColors from '../../styles/color';
 
 export const BottomActionSheetModal = ({
   showModal,

@@ -24,8 +24,8 @@ import {ImagePicker} from '../../core/helper/FileSystemManager';
 import {TRANSACTION_TYPE_EXPENSE} from '../../appConstants';
 import {CATEGORY, PAYMENT} from '../constants/transactionConstant';
 import {Ionicons, MaterialIcons} from '../../assets/vectorIcons';
-import appColors from '../../color';
-import appStyles from '../../style';
+import appColors from '../../styles/color';
+import appStyles from '../../styles/style';
 
 const TransactionDetail = ({route}) => {
   const navigation = useNavigation();

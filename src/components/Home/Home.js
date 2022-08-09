@@ -24,8 +24,8 @@ import {TRANSACTION_DATA} from '../constants/transactionConstant';
 import StatusTags from '../StatusTags';
 import {TRANSACTION_TYPE_EXPENSE} from '../../appConstants';
 import {numberFormatter} from '../../core/helper/HelperFunctions';
-import appColors from '../../color';
-import appStyles from '../../style';
+import appColors from '../../styles/color';
+import appStyles from '../../styles/style';
 
 const ANIMATED_Value = new Animated.Value(0);
 

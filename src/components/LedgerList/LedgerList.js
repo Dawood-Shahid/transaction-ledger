@@ -20,8 +20,8 @@ import {
   Ionicons,
   MaterialCommunityIcons,
 } from '../../assets/vectorIcons';
-import appStyles from '../../style';
-import appColors from '../../color';
+import appStyles from '../../styles/style';
+import appColors from '../../styles/color';
 
 const LedgerList = () => {
   const navigation = useNavigation();

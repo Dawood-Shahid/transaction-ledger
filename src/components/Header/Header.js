@@ -4,7 +4,7 @@ import {View, Text, Icon} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 
 import {Feather} from '../../assets/vectorIcons';
-import appColors from '../../color';
+import appColors from '../../styles/color';
 
 const Header = ({
   title = null,

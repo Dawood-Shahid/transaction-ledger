@@ -2,8 +2,8 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import {View, Text, Input} from 'native-base';
 
-import appStyles from '../../style';
-import appColors from '../../color';
+import appStyles from '../../styles/style';
+import appColors from '../../styles/color';
 
 const InputField = ({
   value,
