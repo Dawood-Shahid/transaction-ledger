@@ -1,7 +1,7 @@
 import React from 'react';
 import {TouchableOpacity, StyleSheet} from 'react-native';
 
-import appColors from '../../color';
+import appColors from '../../styles/color';
 
 const FloatButton = ({
   icon,

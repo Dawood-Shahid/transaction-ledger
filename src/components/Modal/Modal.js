@@ -2,8 +2,8 @@ import React from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {View, Text} from 'native-base';
 
-import appColors from '../../color';
-import appStyles from '../../style';
+import appColors from '../../styles/color';
+import appStyles from '../../styles/style';
 
 const Modal = ({title, content, buttons, onOutsideTap}) => {
   return (

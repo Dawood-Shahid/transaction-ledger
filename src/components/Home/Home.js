@@ -8,20 +8,24 @@ import {
 } from 'react-native';
 import {View, Text, Icon} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
+
 import PageContainer from '../PageContainer';
 import Header from '../Header';
 import FloatButton from '../FloatButton';
+import BottomActionSheetModal from '../BottomActionSheetModal';
+
 import {
   MaterialCommunityIcons,
   Entypo,
   Ionicons,
   AntDesign,
-} from '../../assets/Icons';
+} from '../../assets/vectorIcons';
 import {TRANSACTION_DATA} from '../constants/transactionConstant';
 import StatusTags from '../StatusTags';
-import {numberFormatter, TRANSACTION_TYPE_EXPENSE} from '../../appConstants';
-import appColors from '../../color';
-import appStyles from '../../style';
+import {TRANSACTION_TYPE_EXPENSE} from '../../appConstants';
+import {numberFormatter} from '../../core/helper/HelperFunctions';
+import appColors from '../../styles/color';
+import appStyles from '../../styles/style';
 
 const ANIMATED_Value = new Animated.Value(0);
 
@@ -29,6 +33,8 @@ const Home = ({route}) => {
   const navigation = useNavigation();
   const navigationProps = route.params;
   const [toggle, setToggle] = useState(false);
+  const [toggleViewTransactionModal, setToggleViewTransactionModal] =
+    useState(false);
 
   const toggleAnimationHandler = () => {
     const toValue = toggle ? 0 : 1;
@@ -78,18 +84,18 @@ const Home = ({route}) => {
     return (
       <View style={styles.cashDetails}>
         <View style={styles.cashDetailRow}>
-          <Text color={appColors.text} bold lineHeight={'2xl'}>
+          <Text color={appColors.text} fontSize={'md'} bold lineHeight={'2xl'}>
             Cash In
           </Text>
-          <Text color={appColors.green} bold lineHeight={'2xl'}>
+          <Text color={appColors.green} fontSize={'md'} bold lineHeight={'2xl'}>
             {numberFormatter('50000')}
           </Text>
         </View>
         <View style={styles.cashDetailRow}>
-          <Text color={appColors.text} bold lineHeight={'2xl'}>
+          <Text color={appColors.text} fontSize={'md'} bold lineHeight={'2xl'}>
             Cash Out
           </Text>
-          <Text color={appColors.red} bold lineHeight={'2xl'}>
+          <Text color={appColors.red} fontSize={'md'} bold lineHeight={'2xl'}>
             {numberFormatter('15000')}
           </Text>
         </View>
@@ -97,15 +103,15 @@ const Home = ({route}) => {
           <Text
             color={appColors.primary}
             bold
-            fontSize={'md'}
-            lineHeight={'2xl'}>
+            fontSize={'lg'}
+            lineHeight={'xl'}>
             Total Cash
           </Text>
           <Text
             color={appColors.primary}
             bold
-            fontSize={'md'}
-            lineHeight={'2xl'}>
+            fontSize={'lg'}
+            lineHeight={'xl'}>
             {numberFormatter('35000')}
           </Text>
         </View>
@@ -117,7 +123,7 @@ const Home = ({route}) => {
     return (
       <TouchableOpacity
         activeOpacity={0.9}
-        onPress={() => navigation.navigate('ViewTransaction')}
+        onPress={() => setToggleViewTransactionModal(true)}
         style={styles.cardContainer}>
         <View style={styles.sidebar} />
         <View style={styles.cardContentContainer}>
@@ -156,19 +162,24 @@ const Home = ({route}) => {
               )}
             </View>
             <Text color={appColors.text} fontSize={'xs'} mr={3}>
-              {item.createdAt}
+              {item.transactionDate}
             </Text>
           </View>
-          <View my={0.5} style={styles.cardStatusRow}>
-            <Icon
-              as={Entypo}
-              name={'attachment'}
-              size={'3'}
-              color={appColors.black}
-              style={styles.attachmentIcon}
-            />
-            <Text color={appColors.text}>
-              Attachment{item.attachment.length > 1 && 's'}
+          <View style={appStyles.flexRow}>
+            <View my={0.5} style={styles.cardStatusRow}>
+              <Icon
+                as={Entypo}
+                name={'attachment'}
+                size={'3'}
+                color={appColors.black}
+                style={styles.attachmentIcon}
+              />
+              <Text color={appColors.text}>
+                Attachment{item.attachment.length > 1 && 's'}
+              </Text>
+            </View>
+            <Text color={appColors.text} fontSize={'xs'} mr={3}>
+              {item.transactionTime}
             </Text>
           </View>
           <View style={styles.cardAmountRow}>
@@ -282,6 +293,10 @@ const Home = ({route}) => {
           </View>
           {renderFloatButtonWithAnimation()}
         </View>
+        <BottomActionSheetModal
+          showModal={toggleViewTransactionModal}
+          setShowModal={setToggleViewTransactionModal}
+        />
       </SafeAreaView>
     </PageContainer>
   );
@@ -317,7 +332,7 @@ const styles = StyleSheet.create({
   cashDetailRowTotal: {
     ...appStyles.flexRow,
     paddingHorizontal: 20,
-    borderTopWidth: 0.5,
+    borderTopWidth: 0.75,
     borderTopColor: appColors.primary,
   },
   cardContainer: {
@@ -344,6 +359,7 @@ const styles = StyleSheet.create({
   cardTitleRow: {
     ...appStyles.flexRow,
     marginBottom: 5,
+    alignItems: 'flex-end',
   },
   cardStatus: bg => ({
     backgroundColor: bg,

@@ -3,9 +3,9 @@ import {Modal, TouchableOpacity, StyleSheet} from 'react-native';
 import {Icon, Text, View} from 'native-base';
 import ImageViewer from 'react-native-image-zoom-viewer';
 
-import {Feather} from '../../assets/Icons';
-import appColors from '../../color';
-import appStyles from '../../style';
+import {Feather} from '../../assets/vectorIcons';
+import appColors from '../../styles/color';
+import appStyles from '../../styles/style';
 
 const ImagesPreviewModal = ({
   modalVisible,
