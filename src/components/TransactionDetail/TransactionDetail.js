@@ -3,7 +3,6 @@ import {SafeAreaView, StyleSheet, TouchableOpacity} from 'react-native';
 import {
   View,
   Text,
-  Input,
   Select,
   Actionsheet,
   Icon,
@@ -27,22 +26,27 @@ import {Ionicons, MaterialIcons} from '../../assets/vectorIcons';
 import appColors from '../../styles/color';
 import appStyles from '../../styles/style';
 
-const TransactionDetail = ({route}) => {
+const TransactionDetail = ({
+  route,
+  // states
+  selectedLedger,
+  // actions
+  addTransaction,
+}) => {
   const navigation = useNavigation();
   const navigationProps = route.params;
-  const transactionType =
-    navigationProps.type === TRANSACTION_TYPE_EXPENSE ? 'Out' : 'In';
-  const currentDate = new Date();
+  const isTransactionExpense =
+    navigationProps.type === TRANSACTION_TYPE_EXPENSE;
+  const transactionType = isTransactionExpense ? 'Out' : 'In';
+  const identity = Date.now().toString();
   const [title, setTitle] = useState('');
   const [amount, setAmount] = useState(0);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [date, setDate] = useState(currentDate);
+  const [date, setDate] = useState(identity);
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const [time, setTime] = useState(currentDate);
+  const [time, setTime] = useState(identity);
   const [category, setCategory] = useState(
-    navigationProps.type === TRANSACTION_TYPE_EXPENSE
-      ? 'Labour Changes'
-      : 'Profit',
+    isTransactionExpense ? 'Labour Changes' : 'Profit',
   );
   const [payment, setPayment] = useState('Cash');
   const [toggleActionSheet, setToggleActionSheet] = useState(false);
@@ -73,26 +77,34 @@ const TransactionDetail = ({route}) => {
   };
 
   const saveHandler = (addNew = false) => {
-    console.log(`\nSave transaction\n`, {
+    let balance;
+
+    if (isTransactionExpense) {
+      balance = selectedLedger.cashIn - selectedLedger.cashOut - amount;
+    } else {
+      balance = selectedLedger.cashIn - selectedLedger.cashOut + amount;
+    }
+
+    const data = {
+      id: identity,
       title,
       amount,
       date,
       time,
-      // date: format(date, 'dd-MM-Y'),
-      // time: format(time, 'hh:mm a'),
       category,
-      payment,
+      paymentMethod: payment,
       attachments,
-    });
+      balance,
+      type: isTransactionExpense ? 'expense' : 'income',
+    };
+
+    addTransaction(data);
+
     setTitle('');
     setAmount(0);
-    setDate(currentDate);
-    setTime(currentDate);
-    setCategory(
-      navigationProps.type === TRANSACTION_TYPE_EXPENSE
-        ? 'Labour Changes'
-        : 'Profit',
-    );
+    setDate(identity);
+    setTime(identity);
+    setCategory(isTransactionExpense ? 'Labour Changes' : 'Profit');
     setPayment('Cash');
     setAttachments([]);
     setImageUrls([]);
@@ -115,11 +127,7 @@ const TransactionDetail = ({route}) => {
         <View style={styles.mainContainer}>
           <ScrollView>
             <Text
-              color={
-                navigationProps.type === TRANSACTION_TYPE_EXPENSE
-                  ? appColors.red
-                  : appColors.green
-              }
+              color={isTransactionExpense ? appColors.red : appColors.green}
               py={1}
               bold
               fontSize={'lg'}>
@@ -169,7 +177,7 @@ const TransactionDetail = ({route}) => {
                         style={styles.uploadImageContainer}
                         onPress={() => setShowDatePicker(true)}>
                         <Text color={appColors.black}>
-                          {format(date, 'dd-MM-Y')}
+                          {format(new Date(parseInt(date, 10)), 'MMM, dd yyyy')}
                         </Text>
                         <Icon
                           as={Ionicons}
@@ -190,7 +198,7 @@ const TransactionDetail = ({route}) => {
                         style={styles.uploadImageContainer}
                         onPress={() => setShowTimePicker(true)}>
                         <Text color={appColors.black}>
-                          {format(time, 'hh:mm a')}
+                          {format(new Date(parseInt(time, 10)), 'hh:mm a')}
                         </Text>
                         <Icon
                           as={Ionicons}
@@ -345,23 +353,29 @@ const TransactionDetail = ({route}) => {
           )}
           {showDatePicker && (
             <DateTimePicker
-              value={date}
+              value={new Date(parseInt(date, 10))}
               mode={'date'}
               is24Hour={true}
-              onChange={(event, selectedDate) => {
+              onChange={event => {
+                const {nativeEvent, type} = event;
                 setShowDatePicker(false);
-                setDate(selectedDate);
+                if (type === 'set') {
+                  setDate(nativeEvent.timestamp.toString());
+                }
               }}
             />
           )}
           {showTimePicker && (
             <DateTimePicker
-              value={time}
+              value={new Date(parseInt(time, 10))}
               mode={'time'}
               is24Hour={false}
-              onChange={(event, selectedTime) => {
+              onChange={event => {
+                const {nativeEvent, type} = event;
                 setShowTimePicker(false);
-                setTime(selectedTime);
+                if (type === 'set') {
+                  setTime(nativeEvent.timestamp.toString());
+                }
               }}
             />
           )}

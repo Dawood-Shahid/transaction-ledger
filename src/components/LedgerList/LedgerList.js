@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import {View, Text, Input, Icon} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
+import {format} from 'date-fns';
 
 import PageContainer from '../PageContainer';
 import Header from '../Header';
@@ -14,7 +15,6 @@ import Modal from '../Modal';
 import InputField from '../InputField/InputField';
 
 import {numberFormatter} from '../../core/helper/HelperFunctions';
-import {LEDGER_DATA} from '../constants/transactionConstant';
 import {
   Feather,
   Ionicons,
@@ -23,44 +23,66 @@ import {
 import appStyles from '../../styles/style';
 import appColors from '../../styles/color';
 
-const LedgerList = () => {
+const LedgerList = ({
+  // states
+  ledgerList,
+  // actions
+  addLedger,
+  editLedger,
+  deleteLedger,
+  setSelectedLedger,
+}) => {
   const navigation = useNavigation();
-  const [title, setTitle] = useState('');
-  const [selectedLedger, setSelectedLedger] = useState({});
-  const [titleForEdit, setTitleForEdit] = useState('');
+  const [titleToAddLedger, setTitleToAddLedger] = useState('');
+  const [localSelectedLedger, setLocalSelectedLedger] = useState({});
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const navigationHandler = ledger => {
-    navigation.navigate('Home', {type: ledger.title});
+    setSelectedLedger(ledger);
+    navigation.navigate('Home');
+  };
+
+  const addLedgerHandler = () => {
+    const identity = Date.now().toString();
+    const data = {
+      id: identity,
+      title: titleToAddLedger,
+      isDeleted: 0, // I think this will come from backend
+      createdAt: identity, // I think this will come from backend
+      cashIn: 0, // I think this will come from backend
+      cashOut: 0, // I think this will come from backend
+    };
+    addLedger(data);
+    setTitleToAddLedger('');
   };
 
   const ledgerEditHandler = ledger => {
-    setSelectedLedger(ledger);
-    setTitleForEdit(ledger.title);
+    setLocalSelectedLedger(ledger);
     setShowEditModal(true);
+  };
+
+  const ledgerDeleteHandler = ledger => {
+    setLocalSelectedLedger(ledger);
+    setShowDeleteModal(true);
   };
 
   const updateHandler = () => {
     setShowEditModal(false);
-    setSelectedLedger({...selectedLedger, title: titleForEdit});
+    editLedger({id: localSelectedLedger.id, title: localSelectedLedger.title});
+    setLocalSelectedLedger({});
+  };
+
+  const deleteHandler = () => {
+    setShowDeleteModal(false);
+    setLocalSelectedLedger({});
+    deleteLedger({id: localSelectedLedger.id});
   };
 
   const cancelHandler = () => {
     setShowEditModal(false);
     setShowDeleteModal(false);
-    setSelectedLedger({});
-    setTitleForEdit('');
-  };
-
-  const ledgerDeleteHandler = ledger => {
-    setSelectedLedger(ledger);
-    setShowDeleteModal(true);
-  };
-
-  const deleteHandler = () => {
-    setShowDeleteModal(false);
-    setSelectedLedger({});
+    setLocalSelectedLedger({});
   };
 
   const renderLedgerCard = ({item}) => {
@@ -76,20 +98,20 @@ const LedgerList = () => {
               fontSize={'lg'}
               bold
               noOfLines={1}
-              width={250}
+              width={230}
               mb={-1}
               color={appColors.primary}>
               {item.title}
             </Text>
             <View style={styles.createdAt}>
               <Text fontSize={'sm'} bold color={appColors.text}>
-                {item.createdAt}
+                {format(new Date(parseInt(item.createdAt, 10)), 'MMM, dd yyyy')}
               </Text>
             </View>
           </View>
           <View mb={'1'}>
             <Text fontSize={'md'} color={appColors.text}>
-              Net Balance: {numberFormatter(item.netBalance)}
+              Total Amount: {numberFormatter(item?.cashIn)}
             </Text>
           </View>
           <View style={styles.iconContainer}>
@@ -129,8 +151,10 @@ const LedgerList = () => {
         content={
           <View my={4} style={styles.inputContainer}>
             <Input
-              value={titleForEdit}
-              onChangeText={text => setTitleForEdit(text)}
+              value={localSelectedLedger.title}
+              onChangeText={text =>
+                setLocalSelectedLedger({...localSelectedLedger, title: text})
+              }
               size="md"
               variant="unstyled"
               width={'2xs'}
@@ -180,7 +204,7 @@ const LedgerList = () => {
             <Text fontSize={'md'}>
               Are you sure, you want to delete{' '}
               <Text color={appColors.red} bold>
-                {selectedLedger.title}
+                {localSelectedLedger.title}
               </Text>
               ?
             </Text>
@@ -224,16 +248,14 @@ const LedgerList = () => {
           <View style={styles.headerInputContainer}>
             <Header showLeftIcon={false} title={'Transaction Ledgers'} />
             <InputField
-              value={title}
-              setValue={setTitle}
+              value={titleToAddLedger}
+              setValue={setTitleToAddLedger}
               placeholder={'Add Ledger Name'}
               customStyles={styles.inputCustomStyles}
               rightElement={
                 <TouchableOpacity
                   activeOpacity={0.9}
-                  onPress={() =>
-                    console.log(`\nOpen modal for add new ledger\n`, title)
-                  }
+                  onPress={() => addLedgerHandler()}
                   style={styles.addButton}>
                   <Icon
                     as={Ionicons}
@@ -248,10 +270,11 @@ const LedgerList = () => {
           <View style={appStyles.flexCount(1)}>
             {true ? (
               <VirtualizedList
-                data={LEDGER_DATA}
+                data={ledgerList}
                 renderItem={renderLedgerCard}
+                contentContainerStyle={styles.listStyle}
                 keyExtractor={(item, index) => `${item.text}-${index}`}
-                getItemCount={() => LEDGER_DATA.length}
+                getItemCount={() => ledgerList.length}
                 getItem={(data, index) => ({id: index, ...data[index]})}
               />
             ) : (
@@ -280,7 +303,6 @@ const styles = StyleSheet.create({
     backgroundColor: appColors.primary,
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
-    marginBottom: 5,
   },
   inputCustomStyles: {
     margin: 10,
@@ -300,6 +322,9 @@ const styles = StyleSheet.create({
     width: '15%',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  listStyle: {
+    paddingVertical: 5,
   },
   cardContainer: {
     ...appStyles.flexRow,
@@ -329,7 +354,7 @@ const styles = StyleSheet.create({
   createdAt: {
     backgroundColor: appColors.secondary,
     height: 30,
-    width: 90,
+    width: 100,
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomLeftRadius: 8,

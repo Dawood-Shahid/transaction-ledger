@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -20,7 +20,6 @@ import {
   Ionicons,
   AntDesign,
 } from '../../assets/vectorIcons';
-import {TRANSACTION_DATA} from '../constants/transactionConstant';
 import StatusTags from '../StatusTags';
 import {TRANSACTION_TYPE_EXPENSE} from '../../appConstants';
 import {numberFormatter} from '../../core/helper/HelperFunctions';
@@ -29,12 +28,32 @@ import appStyles from '../../styles/style';
 
 const ANIMATED_Value = new Animated.Value(0);
 
-const Home = ({route}) => {
+const Home = ({
+  // state
+  selectedLedger,
+  transactionList,
+  // action
+  setSelectedLedger,
+}) => {
+  // const selectedLedger = {
+  //   id: '1660387506918',
+  //   title: 'North Town phase II, block 1, Ext-2201',
+  //   createdAt: '1660387506918',
+  //   cashIn: 80000,
+  //   cashOut: 45000,
+  //   isDeleted: 0,
+  // };
   const navigation = useNavigation();
-  const navigationProps = route.params;
   const [toggle, setToggle] = useState(false);
   const [toggleViewTransactionModal, setToggleViewTransactionModal] =
     useState(false);
+
+  useEffect(() => {
+    return () => {
+      setSelectedLedger({});
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const toggleAnimationHandler = () => {
     const toValue = toggle ? 0 : 1;
@@ -62,13 +81,8 @@ const Home = ({route}) => {
           size={'5'}
           color={appColors.white}
         />
-        <Text
-          color={appColors.white}
-          ml={2}
-          bold
-          numberOfLines={1}
-          maxWidth={130}>
-          {navigationProps.type}
+        <Text color={appColors.white} mx={2} bold>
+          Ledgers
         </Text>
         <Icon
           as={Entypo}
@@ -88,7 +102,7 @@ const Home = ({route}) => {
             Cash In
           </Text>
           <Text color={appColors.green} fontSize={'md'} bold lineHeight={'2xl'}>
-            {numberFormatter('50000')}
+            {numberFormatter(selectedLedger.cashIn)}
           </Text>
         </View>
         <View style={styles.cashDetailRow}>
@@ -96,7 +110,7 @@ const Home = ({route}) => {
             Cash Out
           </Text>
           <Text color={appColors.red} fontSize={'md'} bold lineHeight={'2xl'}>
-            {numberFormatter('15000')}
+            {numberFormatter(selectedLedger.cashOut)}
           </Text>
         </View>
         <View style={styles.cashDetailRowTotal}>
@@ -105,14 +119,14 @@ const Home = ({route}) => {
             bold
             fontSize={'lg'}
             lineHeight={'xl'}>
-            Total Cash
+            Net Balance
           </Text>
           <Text
             color={appColors.primary}
             bold
             fontSize={'lg'}
             lineHeight={'xl'}>
-            {numberFormatter('35000')}
+            {numberFormatter(selectedLedger.cashIn - selectedLedger.cashOut)}
           </Text>
         </View>
       </View>
@@ -175,7 +189,7 @@ const Home = ({route}) => {
                 style={styles.attachmentIcon}
               />
               <Text color={appColors.text}>
-                Attachment{item.attachment.length > 1 && 's'}
+                Attachment{item.attachments.length > 1 && 's'}
               </Text>
             </View>
             <Text color={appColors.text} fontSize={'xs'} mr={3}>
@@ -270,14 +284,18 @@ const Home = ({route}) => {
         <Header leftIcon={renderLeftIcon} />
         <View style={styles.mainContainer}>
           <View style={[appStyles.flexCount(1), styles.contentContainer]}>
+            <Text color={appColors.white} mx={3} mt={2} bold noOfLines={1}>
+              {selectedLedger.title}
+            </Text>
             {renderCashDetailCard()}
             <View style={[appStyles.flexCount(1), styles.listWrapper]}>
               {true ? (
                 <VirtualizedList
-                  data={TRANSACTION_DATA}
+                  data={transactionList}
                   renderItem={renderCard}
+                  contentContainerStyle={styles.listStyle}
                   keyExtractor={(item, index) => `${item.text}-${index}`}
-                  getItemCount={() => TRANSACTION_DATA.length}
+                  getItemCount={() => transactionList.length}
                   getItem={(data, index) => ({id: index, ...data[index]})}
                 />
               ) : (
@@ -334,6 +352,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderTopWidth: 0.75,
     borderTopColor: appColors.primary,
+  },
+  listStyle: {
+    paddingVertical: 5,
   },
   cardContainer: {
     ...appStyles.flexRow,
