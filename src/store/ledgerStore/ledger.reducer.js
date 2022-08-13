@@ -95,11 +95,9 @@ export const ledgerReducer = (state = INITIAL_STATE, action) => {
     case ADD_TRANSACTION:
       const clonedSelectedLedger = deepClone(state.selectedLedger);
       if (action.payload.type === TRANSACTION_TYPE_EXPENSE) {
-        clonedSelectedLedger.cashOut =
-          clonedSelectedLedger.cashOut + action.payload.amount;
+        clonedSelectedLedger.cashOut += action.payload.amount;
       } else {
-        clonedSelectedLedger.cashIn =
-          clonedSelectedLedger.cashIn + action.payload.amount;
+        clonedSelectedLedger.cashIn += action.payload.amount;
       }
       return {
         ...state,
