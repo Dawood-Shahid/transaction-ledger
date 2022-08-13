@@ -1,4 +1,4 @@
-export const numberFormatter = (number = '10000') => {
+export const numberFormatter = (number = '0') => {
   const numberToString = number.toString();
 
   if (numberToString.length < 4) {

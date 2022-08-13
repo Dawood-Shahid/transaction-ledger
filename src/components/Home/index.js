@@ -14,6 +14,7 @@ const mapDispatchToProps = dispatch =>
 
 const mapStateToProps = state => ({
   selectedLedger: state.ledger.selectedLedger,
+  transactionList: state.ledger.ledgerTransactionList,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

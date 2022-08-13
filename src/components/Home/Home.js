@@ -20,7 +20,6 @@ import {
   Ionicons,
   AntDesign,
 } from '../../assets/vectorIcons';
-import {TRANSACTION_DATA} from '../constants/transactionConstant';
 import StatusTags from '../StatusTags';
 import {TRANSACTION_TYPE_EXPENSE} from '../../appConstants';
 import {numberFormatter} from '../../core/helper/HelperFunctions';
@@ -32,6 +31,7 @@ const ANIMATED_Value = new Animated.Value(0);
 const Home = ({
   // state
   selectedLedger,
+  transactionList,
   // action
   setSelectedLedger,
 }) => {
@@ -39,8 +39,8 @@ const Home = ({
   //   id: '1660387506918',
   //   title: 'North Town phase II, block 1, Ext-2201',
   //   createdAt: '1660387506918',
-  //   cashIn: 50000,
-  //   cashOut: 15000,
+  //   cashIn: 80000,
+  //   cashOut: 45000,
   //   isDeleted: 0,
   // };
   const navigation = useNavigation();
@@ -189,7 +189,7 @@ const Home = ({
                 style={styles.attachmentIcon}
               />
               <Text color={appColors.text}>
-                Attachment{item.attachment.length > 1 && 's'}
+                Attachment{item.attachments.length > 1 && 's'}
               </Text>
             </View>
             <Text color={appColors.text} fontSize={'xs'} mr={3}>
@@ -291,11 +291,11 @@ const Home = ({
             <View style={[appStyles.flexCount(1), styles.listWrapper]}>
               {true ? (
                 <VirtualizedList
-                  data={TRANSACTION_DATA}
+                  data={transactionList}
                   renderItem={renderCard}
                   contentContainerStyle={styles.listStyle}
                   keyExtractor={(item, index) => `${item.text}-${index}`}
-                  getItemCount={() => TRANSACTION_DATA.length}
+                  getItemCount={() => transactionList.length}
                   getItem={(data, index) => ({id: index, ...data[index]})}
                 />
               ) : (
