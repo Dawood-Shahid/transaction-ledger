@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
     height: 40,
     backgroundColor: appColors.primary,
     paddingVertical: 10,
+    paddingHorizontal: 5,
     justifyContent: 'space-between',
     alignItems: 'center',
     borderBottomLeftRadius: 8,

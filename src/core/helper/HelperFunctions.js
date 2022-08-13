@@ -1,11 +1,14 @@
 export const numberFormatter = (number = '10000') => {
-  if (number.length < 4) {
-    return number;
+  const numberToString = number.toString();
+
+  if (numberToString.length < 4) {
+    return numberToString;
   }
-  let pointIndex = number.length - 3;
-  let remainingNumber = number.slice(0, pointIndex);
-  let lastThreeNumbers = number.slice(pointIndex);
+  let pointIndex = numberToString.length - 3;
+  let remainingNumber = numberToString?.slice(0, pointIndex);
+  let lastThreeNumbers = numberToString?.slice(pointIndex);
   let formattedNumber;
+
   if (remainingNumber.length > 3) {
     remainingNumber = numberFormatter(remainingNumber);
   }
@@ -38,8 +41,10 @@ const findTypeOf = value => {
 
 export const deepClone = value => {
   let result;
-  if (value !== null || value !== undefined) {
+  // eslint-disable-next-line no-extra-boolean-cast
+  if (!!value) {
     const isArray = findTypeOf(value) === typeConst.ARRAY;
+    const isObject = findTypeOf(value) === typeConst.OBJECT;
 
     if (isArray) {
       const {length} = value;
@@ -56,13 +61,12 @@ export const deepClone = value => {
         }
       });
       result = newArray;
-    } else {
-      const objectKeys = Object.keys(value);
+    } else if (isObject) {
       // eslint-disable-next-line no-new-object
       const newObject = new Object(null);
+      const objectKeys = Object.keys(value);
 
       objectKeys.forEach(key => {
-        console.log('isObject => key, value: ', key, value[key]);
         const eleIsArray = findTypeOf(value[key]) === typeConst.ARRAY;
         const eleIsObject = findTypeOf(value[key]) === typeConst.OBJECT;
 
@@ -73,6 +77,8 @@ export const deepClone = value => {
         }
       });
       result = newObject;
+    } else {
+      result = value;
     }
   } else {
     result = value;
