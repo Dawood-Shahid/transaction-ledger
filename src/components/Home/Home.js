@@ -8,18 +8,15 @@ import {
 } from 'react-native';
 import {View, Text, Icon} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
+import {format} from 'date-fns';
 
 import PageContainer from '../PageContainer';
 import Header from '../Header';
 import FloatButton from '../FloatButton';
 import BottomActionSheetModal from '../BottomActionSheetModal';
 
-import {
-  MaterialCommunityIcons,
-  Entypo,
-  Ionicons,
-  AntDesign,
-} from '../../assets/vectorIcons';
+import {Entypo, Ionicons, AntDesign} from '../../assets/vectorIcons';
+import FontAwesomeIcon, {faBookBookmark} from '../../assets/fontAwesomeIcons';
 import StatusTags from '../StatusTags';
 import {TRANSACTION_TYPE_EXPENSE} from '../../appConstants';
 import {numberFormatter} from '../../core/helper/HelperFunctions';
@@ -75,12 +72,7 @@ const Home = ({
   const renderLeftIcon = () => {
     return (
       <View style={appStyles.flexRow}>
-        <Icon
-          as={MaterialCommunityIcons}
-          name={'notebook-multiple'}
-          size={'5'}
-          color={appColors.white}
-        />
+        <FontAwesomeIcon icon={faBookBookmark} color={appColors.white} />
         <Text color={appColors.white} mx={2} bold>
           Ledgers
         </Text>
@@ -176,7 +168,10 @@ const Home = ({
               )}
             </View>
             <Text color={appColors.text} fontSize={'xs'} mr={3}>
-              {item.transactionDate}
+              {format(
+                new Date(parseInt(item.transactionDate, 10)),
+                'MMM, dd yyyy',
+              )}
             </Text>
           </View>
           <View style={appStyles.flexRow}>
@@ -193,7 +188,7 @@ const Home = ({
               </Text>
             </View>
             <Text color={appColors.text} fontSize={'xs'} mr={3}>
-              {item.transactionTime}
+              {format(new Date(parseInt(item.transactionTime, 10)), 'hh:mm a')}
             </Text>
           </View>
           <View style={styles.cardAmountRow}>

@@ -24,8 +24,8 @@ const INITIAL_STATE = {
     {
       id: 1,
       title: 'Monthly Income',
-      transactionDate: '08-08-2022',
-      transactionTime: '10:00 AM',
+      transactionDate: '1660387506918',
+      transactionTime: '1660387506918',
       category: 'Salary',
       paymentMethod: 'Online',
       balance: '80000',
@@ -36,8 +36,8 @@ const INITIAL_STATE = {
     {
       id: 2,
       title: 'Utility',
-      transactionDate: '08-08-2022',
-      transactionTime: '10:00 AM',
+      transactionDate: '1660387506918',
+      transactionTime: '1660387506918',
       category: 'Bills',
       paymentMethod: 'Cash',
       balance: '60000',
@@ -48,8 +48,8 @@ const INITIAL_STATE = {
     {
       id: 3,
       title: 'Grocery Items',
-      transactionDate: '08-08-2022',
-      transactionTime: '10:00 AM',
+      transactionDate: '1660387506918',
+      transactionTime: '1660387506918',
       category: 'Grocery',
       paymentMethod: 'Cash',
       balance: '35000',
