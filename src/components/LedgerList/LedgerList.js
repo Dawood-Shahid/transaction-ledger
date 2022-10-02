@@ -8,6 +8,7 @@ import {
 import {View, Text, Input, Icon} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 import {format} from 'date-fns';
+import {useForm, Controller} from 'react-hook-form';
 
 import PageContainer from '../PageContainer';
 import Header from '../Header';
@@ -33,28 +34,35 @@ const LedgerList = ({
   setSelectedLedger,
 }) => {
   const navigation = useNavigation();
-  const [titleToAddLedger, setTitleToAddLedger] = useState('');
+  // const [titleToAddLedger, setTitleToAddLedger] = useState('');
   const [localSelectedLedger, setLocalSelectedLedger] = useState({});
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const {control, handleSubmit, reset} = useForm({
+    defaultValues: {
+      title: '',
+    },
+  });
 
   const navigationHandler = ledger => {
     setSelectedLedger(ledger);
     navigation.navigate('Home');
   };
 
-  const addLedgerHandler = () => {
+  const addLedgerHandler = title => {
     const identity = Date.now().toString();
     const data = {
       id: identity,
-      title: titleToAddLedger,
+      ...title,
       isDeleted: 0, // I think this will come from backend
       createdAt: identity, // I think this will come from backend
       cashIn: 0, // I think this will come from backend
       cashOut: 0, // I think this will come from backend
     };
+
     addLedger(data);
-    setTitleToAddLedger('');
+    reset();
   };
 
   const ledgerEditHandler = ledger => {
@@ -247,24 +255,31 @@ const LedgerList = ({
         <View style={styles.mainContainer}>
           <View style={styles.headerInputContainer}>
             <Header showLeftIcon={false} title={'Transaction Ledgers'} />
-            <InputField
-              value={titleToAddLedger}
-              setValue={setTitleToAddLedger}
-              placeholder={'Add Ledger Name'}
-              customStyles={styles.inputCustomStyles}
-              rightElement={
-                <TouchableOpacity
-                  activeOpacity={0.9}
-                  onPress={() => addLedgerHandler()}
-                  style={styles.addButton}>
-                  <Icon
-                    as={Ionicons}
-                    name={'md-add'}
-                    size={'6'}
-                    color={appColors.primary}
-                  />
-                </TouchableOpacity>
-              }
+            <Controller
+              control={control}
+              name={'title'}
+              render={({field: {onChange, value}}) => (
+                <InputField
+                  value={value}
+                  setValue={onChange}
+                  placeholder={'Add Ledger Name'}
+                  customStyles={styles.inputCustomStyles}
+                  rightElement={
+                    <TouchableOpacity
+                      activeOpacity={0.9}
+                      disabled={!value}
+                      onPress={handleSubmit(addLedgerHandler)}
+                      style={styles.addButton}>
+                      <Icon
+                        as={Ionicons}
+                        name={'md-add'}
+                        size={'6'}
+                        color={appColors.primary}
+                      />
+                    </TouchableOpacity>
+                  }
+                />
+              )}
             />
           </View>
           <View style={appStyles.flexCount(1)}>

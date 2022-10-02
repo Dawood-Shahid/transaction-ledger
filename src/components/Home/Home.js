@@ -15,12 +15,8 @@ import Header from '../Header';
 import FloatButton from '../FloatButton';
 import BottomActionSheetModal from '../BottomActionSheetModal';
 
-import {
-  MaterialCommunityIcons,
-  Entypo,
-  Ionicons,
-  AntDesign,
-} from '../../assets/vectorIcons';
+import {Entypo, Ionicons, AntDesign} from '../../assets/vectorIcons';
+import FontAwesomeIcon, {faBookBookmark} from '../../assets/fontAwesomeIcons';
 import StatusTags from '../StatusTags';
 import {TRANSACTION_TYPE_EXPENSE} from '../../appConstants';
 import {numberFormatter} from '../../core/helper/HelperFunctions';
@@ -76,12 +72,7 @@ const Home = ({
   const renderLeftIcon = () => {
     return (
       <View style={appStyles.flexRow}>
-        <Icon
-          as={MaterialCommunityIcons}
-          name={'notebook-multiple'}
-          size={'5'}
-          color={appColors.white}
-        />
+        <FontAwesomeIcon icon={faBookBookmark} color={appColors.white} />
         <Text color={appColors.white} mx={2} bold>
           Ledgers
         </Text>
