@@ -1,14 +1,15 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {Icon, View} from 'native-base';
 
 import LedgerList from '../LedgerList';
 import Home from '../Home';
 import TransactionDetail from '../TransactionDetail';
 import Menu from '../Menu';
+import {MaterialCommunityIcons} from '../../assets/vectorIcons';
+import FontAwesomeIcon, {faBarsStaggered} from '../../assets/fontAwesomeIcons';
 import appColors from '../../styles/color';
-import {View} from 'native-base';
-import {LedgerIcon} from '../../assets/svgIcons';
 
 const StackNavigator = () => {
   const Stack = createStackNavigator();
@@ -42,38 +43,45 @@ const BottomTab = () => {
       screenOptions={({route}) => ({
         tabBarHideOnKeyboard: true,
         tabBarStyle: {
-          height: 80,
-          // paddingTop: verticalScale(isIOS ? 15 : 0),
-          // position: 'absolute',
-          // backgroundColor: appColors.primary,
+          height: 75,
           borderTopLeftRadius: 8,
           borderTopRightRadius: 8,
-          // borderColor: appColors.red,
-          // borderWidth: 1,
         },
-        // tabBarActiveTintColor: appColors.primary,
-        // tabBarInactiveTintColor: appColors.border,
-        tabBarIcon: ({focused, color}) => {
+        tabBarActiveTintColor: appColors.primary,
+        tabBarInactiveTintColor: appColors.inputIconColor,
+        tabBarIcon: ({color}) => {
           let style = {
+            height: 40,
+            width: 40,
             alignItems: 'center',
-            marginTop: 10,
-            marginBottom: 5,
+            justifyContent: 'flex-end',
+            marginBottom: -5,
           };
 
-          console.log('\n > file: StackNavigator.js > line 91 > route', route);
-
           return (
-            <View>
-              <View style={style}>
-                {route.name === 'Ledgers' && <LedgerIcon />}
-                {route.name === 'Menu' && <LedgerIcon />}
-              </View>
+            <View style={style}>
+              {route.name === 'Ledgers' && (
+                <Icon
+                  as={MaterialCommunityIcons}
+                  name={'bookshelf'}
+                  size={'9'}
+                  color={color}
+                />
+              )}
+              {route.name === 'Menu' && (
+                <FontAwesomeIcon
+                  icon={faBarsStaggered}
+                  color={color}
+                  size={28}
+                />
+              )}
             </View>
           );
         },
         tabBarLabelStyle: {
-          marginBottom: 10,
+          marginBottom: 12,
           fontSize: 14,
+          fontWeight: 'bold',
           lineHeight: 16,
         },
       })}>

@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import {View, Text, Icon} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
+import {format} from 'date-fns';
 
 import PageContainer from '../PageContainer';
 import Header from '../Header';
@@ -176,7 +177,10 @@ const Home = ({
               )}
             </View>
             <Text color={appColors.text} fontSize={'xs'} mr={3}>
-              {item.transactionDate}
+              {format(
+                new Date(parseInt(item.transactionDate, 10)),
+                'MMM, dd yyyy',
+              )}
             </Text>
           </View>
           <View style={appStyles.flexRow}>
@@ -193,7 +197,7 @@ const Home = ({
               </Text>
             </View>
             <Text color={appColors.text} fontSize={'xs'} mr={3}>
-              {item.transactionTime}
+              {format(new Date(parseInt(item.transactionTime, 10)), 'hh:mm a')}
             </Text>
           </View>
           <View style={styles.cardAmountRow}>
