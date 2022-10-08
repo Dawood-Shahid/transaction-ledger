@@ -28,16 +28,6 @@ import {Ionicons, MaterialIcons} from '../../assets/vectorIcons';
 import appColors from '../../styles/color';
 import appStyles from '../../styles/style';
 
-// const keys = {
-//   title: 'title',
-//   amount: 'amount',
-//   transactionDate: 'date',
-//   transactionTime: 'time',
-//   category: 'category',
-//   paymentMethod: 'payment',
-//   attachments: 'attachments',
-// };
-
 const TransactionDetail = ({
   route,
   // states
@@ -72,59 +62,33 @@ const TransactionDetail = ({
     },
   });
 
-  // useLayoutEffect(() => {
-  //   if (
-  //     navigationProps.hasOwnProperty('title') &&
-  //     navigationProps.hasOwnProperty('amount')
-  //   ) {
-  //     const {
-  //       title,
-  //       amount,
-  //       transactionDate,
-  //       transactionTime,
-  //       category,
-  //       paymentMethod,
-  //       attachments,
-  //     } = navigationProps;
+  useLayoutEffect(() => {
+    if (
+      navigationProps.hasOwnProperty('title') &&
+      navigationProps.hasOwnProperty('amount')
+    ) {
+      const {
+        title,
+        amount,
+        transactionDate,
+        transactionTime,
+        category,
+        paymentMethod,
+        attachments,
+      } = navigationProps;
 
-  //     console.log(
-  //       '\n -------- > file: TransactionDetail.js > line 85 > navigationProps',
-  //       {
-  //         title,
-  //         amount: +amount,
-  //         transactionDate,
-  //         transactionTime,
-  //         category,
-  //         paymentMethod,
-  //         attachments,
-  //       },
-  //     );
-  //     // delete navigationProps.id;
-  //     // delete navigationProps.balance;
-  //     // delete navigationProps.type;
+      setValue('title', title);
+      setValue('amount', +amount);
+      setValue('date', transactionDate);
+      setValue('time', transactionTime);
+      setValue('category', category);
+      setValue('payment', paymentMethod);
+      setValue('attachments', attachments);
+    }
+  });
 
-  //     // for (const key in navigationProps) {
-  //     //   console.log(
-  //     //     '\n -------- > file: TransactionDetail.js > line 73 > key',
-  //     //     key,
-  //     //   );
-  //     //   setValue(keys[key], key);
-  //     // }
-  //     console.log(`\nset values\n`, title, +amount);
-  //     setValue('title', title);
-  //     setValue('amount', +amount);
-  //   }
-  //   console.log(`\nin use layout\n`, getValues());
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
-  // console.log(`\nin use layout\n`, {
-  //   t: getValues('title'),
-  //   a: getValues('amount'),
-  // });
   useEffect(() => {
     return () => {
-      console.log(`\nreset run\n`);
       reset();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
