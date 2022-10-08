@@ -16,6 +16,7 @@ const StatusTags = ({text, color, background}) => {
       borderWidth={0.6}
       borderColor={color}
       color={color}
+      textTransform={'capitalize'}
       style={styles.statusContainer(background)}>
       {text}
     </Text>

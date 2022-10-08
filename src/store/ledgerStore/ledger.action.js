@@ -3,6 +3,7 @@ export const EDIT_LEDGER = 'EDIT_LEDGER';
 export const DELETE_LEDGER = 'DELETE_LEDGER';
 export const SELECTED_LEDGER = 'SELECTED_LEDGER';
 export const ADD_TRANSACTION = 'ADD_TRANSACTION';
+export const SELECTED_TRANSACTION = 'SELECTED_TRANSACTION';
 
 //! Need success functions for all these actions
 export const addLedger = payload => ({
@@ -27,5 +28,10 @@ export const setSelectedLedger = payload => ({
 
 export const addTransaction = payload => ({
   type: ADD_TRANSACTION,
+  payload,
+});
+
+export const setSelectedTransaction = payload => ({
+  type: SELECTED_TRANSACTION,
   payload,
 });

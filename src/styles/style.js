@@ -27,6 +27,19 @@ const appStyles = StyleSheet.create({
     shadowColor: appColors.primary,
     elevation: 4,
   },
+  button: (bg = appColors.primary, border = appColors.transparent) => ({
+    backgroundColor: bg,
+    height: 40,
+    width: '50%',
+    borderWidth: 1,
+    borderColor: border,
+  }),
+  buttonText: (color = appColors.white) => ({
+    color: color,
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    fontSize: 'md',
+  }),
 });
 
 export default appStyles;

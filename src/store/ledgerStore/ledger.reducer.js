@@ -5,6 +5,7 @@ import {
   DELETE_LEDGER,
   SELECTED_LEDGER,
   ADD_TRANSACTION,
+  SELECTED_TRANSACTION,
 } from './ledger.action';
 import {TRANSACTION_TYPE_EXPENSE} from '../../appConstants';
 
@@ -58,6 +59,7 @@ const INITIAL_STATE = {
       attachments: [1, 2, 3],
     },
   ],
+  selectedTransaction: {},
 };
 
 export const ledgerReducer = (state = INITIAL_STATE, action) => {
@@ -103,6 +105,11 @@ export const ledgerReducer = (state = INITIAL_STATE, action) => {
         ...state,
         ledgerTransactionList: [...state.ledgerTransactionList, action.payload],
         selectedLedger: clonedSelectedLedger,
+      };
+    case SELECTED_TRANSACTION:
+      return {
+        ...state,
+        selectedTransaction: action.payload,
       };
     default:
       return {
