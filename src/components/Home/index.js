@@ -2,12 +2,16 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
 import Home from './Home';
-import {setSelectedLedger} from '../../store/ledgerStore/ledger.action';
+import {
+  setSelectedLedger,
+  setSelectedTransaction,
+} from '../../store/ledgerStore/ledger.action';
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       setSelectedLedger,
+      setSelectedTransaction,
     },
     dispatch,
   );

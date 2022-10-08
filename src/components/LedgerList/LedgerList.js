@@ -55,10 +55,10 @@ const LedgerList = ({
     const data = {
       id: identity,
       ...title,
-      isDeleted: 0, // I think this will come from backend
-      createdAt: identity, // I think this will come from backend
-      cashIn: 0, // I think this will come from backend
-      cashOut: 0, // I think this will come from backend
+      isDeleted: 0, //! I think this will come from backend
+      createdAt: identity, //! I think this will come from backend
+      cashIn: 0, //! I think this will come from backend
+      cashOut: 0, //! I think this will come from backend
     };
 
     addLedger(data);
@@ -135,7 +135,7 @@ const LedgerList = ({
               />
             </TouchableOpacity>
             <TouchableOpacity
-              activeOpacity={0.5}
+              activeOpacity={0.7}
               style={styles.icon(appColors.redBackground, appColors.red)}
               onPress={() => ledgerDeleteHandler(item)}>
               <Icon
@@ -158,6 +158,7 @@ const LedgerList = ({
         onOutsideTap={cancelHandler}
         content={
           <View my={4} style={styles.inputContainer}>
+            {/* //! should use hook forms */}
             <Input
               value={localSelectedLedger.title}
               onChangeText={text =>

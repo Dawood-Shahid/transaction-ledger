@@ -5,14 +5,14 @@ import appColors from '../../styles/color';
 
 const FloatButton = ({
   icon,
-  onClick,
+  onTap,
   color = appColors.primary,
   position = {bottom: 0, right: 0},
 }) => {
   return (
     <TouchableOpacity
       activeOpacity={0.9}
-      onPress={onClick}
+      onPress={onTap}
       style={styles.buttonContainer(color, position)}>
       {icon}
     </TouchableOpacity>

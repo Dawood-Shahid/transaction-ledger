@@ -31,6 +31,7 @@ const Home = ({
   transactionList,
   // action
   setSelectedLedger,
+  setSelectedTransaction,
 }) => {
   // const selectedLedger = {
   //   id: '1660387506918',
@@ -67,6 +68,11 @@ const Home = ({
   const navigationHandler = (navigateTo, params) => {
     navigation.navigate(navigateTo, params);
     toggleAnimationHandler();
+  };
+
+  const viewTransactionDetails = data => {
+    setToggleViewTransactionModal(true);
+    setSelectedTransaction(data);
   };
 
   const renderLeftIcon = () => {
@@ -125,91 +131,89 @@ const Home = ({
     );
   };
 
-  const renderCard = ({item}) => {
-    return (
-      <TouchableOpacity
-        activeOpacity={0.9}
-        onPress={() => setToggleViewTransactionModal(true)}
-        style={styles.cardContainer}>
-        <View style={styles.sidebar} />
-        <View style={styles.cardContentContainer}>
-          <View mb={1} style={styles.cardTitleRow}>
-            <Text noOfLines={1} bold color={appColors.primary} width={270}>
-              {item.title}
-            </Text>
-            <View
-              style={styles.cardStatus(
-                item.type === TRANSACTION_TYPE_EXPENSE
-                  ? appColors.red
-                  : appColors.green,
-              )}>
-              <Text
-                fontSize={'sm'}
-                bold
-                textTransform={'capitalize'}
-                color={appColors.white}>
-                {item.type}
-              </Text>
-            </View>
-          </View>
-          <View style={appStyles.flexRow}>
-            <View style={styles.cardStatusRow}>
-              <StatusTags
-                text={item.paymentMethod}
-                color={appColors.paymentMethodText}
-                background={appColors.paymentMethodBackground}
-              />
-              {item.category && (
-                <StatusTags
-                  text={item.category}
-                  color={appColors.categoryText}
-                  background={appColors.categoryBackground}
-                />
-              )}
-            </View>
-            <Text color={appColors.text} fontSize={'xs'} mr={3}>
-              {format(
-                new Date(parseInt(item.transactionDate, 10)),
-                'MMM, dd yyyy',
-              )}
-            </Text>
-          </View>
-          <View style={appStyles.flexRow}>
-            <View my={0.5} style={styles.cardStatusRow}>
-              <Icon
-                as={Entypo}
-                name={'attachment'}
-                size={'3'}
-                color={appColors.black}
-                style={styles.attachmentIcon}
-              />
-              <Text color={appColors.text}>
-                Attachment{item.attachments.length > 1 && 's'}
-              </Text>
-            </View>
-            <Text color={appColors.text} fontSize={'xs'} mr={3}>
-              {format(new Date(parseInt(item.transactionTime, 10)), 'hh:mm a')}
-            </Text>
-          </View>
-          <View style={styles.cardAmountRow}>
-            <Text fontSize={'xs'} color={appColors.text}>
-              Balance: {numberFormatter(item.balance)}
-            </Text>
+  const renderCard = ({item}) => (
+    <TouchableOpacity
+      activeOpacity={0.9}
+      onPress={() => viewTransactionDetails(item)}
+      style={styles.cardContainer}>
+      <View style={styles.sidebar} />
+      <View style={styles.cardContentContainer}>
+        <View mb={1} style={styles.cardTitleRow}>
+          <Text noOfLines={1} bold color={appColors.primary} width={270}>
+            {item.title}
+          </Text>
+          <View
+            style={styles.cardStatus(
+              item.type === TRANSACTION_TYPE_EXPENSE
+                ? appColors.red
+                : appColors.green,
+            )}>
             <Text
-              color={
-                item.type === TRANSACTION_TYPE_EXPENSE
-                  ? appColors.red
-                  : appColors.green
-              }
+              fontSize={'sm'}
               bold
-              mr={3}>
-              {numberFormatter(item.amount)}
+              textTransform={'capitalize'}
+              color={appColors.white}>
+              {item.type}
             </Text>
           </View>
         </View>
-      </TouchableOpacity>
-    );
-  };
+        <View style={appStyles.flexRow}>
+          <View style={styles.cardStatusRow}>
+            <StatusTags
+              text={item.paymentMethod}
+              color={appColors.paymentMethodText}
+              background={appColors.paymentMethodBackground}
+            />
+            {item.category && (
+              <StatusTags
+                text={item.category}
+                color={appColors.categoryText}
+                background={appColors.categoryBackground}
+              />
+            )}
+          </View>
+          <Text color={appColors.text} fontSize={'xs'} mr={3}>
+            {format(
+              new Date(parseInt(item.transactionDate, 10)),
+              'MMM, dd yyyy',
+            )}
+          </Text>
+        </View>
+        <View style={appStyles.flexRow}>
+          <View my={0.5} style={styles.cardStatusRow}>
+            <Icon
+              as={Entypo}
+              name={'attachment'}
+              size={'3'}
+              color={appColors.black}
+              style={styles.attachmentIcon}
+            />
+            <Text color={appColors.text}>
+              Attachment{item.attachments.length > 1 && 's'}
+            </Text>
+          </View>
+          <Text color={appColors.text} fontSize={'xs'} mr={3}>
+            {format(new Date(parseInt(item.transactionTime, 10)), 'hh:mm a')}
+          </Text>
+        </View>
+        <View style={styles.cardAmountRow}>
+          <Text fontSize={'xs'} color={appColors.text}>
+            Balance: {numberFormatter(item.balance)}
+          </Text>
+          <Text
+            color={
+              item.type === TRANSACTION_TYPE_EXPENSE
+                ? appColors.red
+                : appColors.green
+            }
+            bold
+            mr={3}>
+            {numberFormatter(item.amount)}
+          </Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
 
   const renderFloatButtonWithAnimation = () => {
     return (
@@ -223,7 +227,7 @@ const Home = ({
               style={[styles.transactionButton, styles.animateButton(-120)]}>
               <FloatButton
                 position={{bottom: 0, right: 0}}
-                onClick={() =>
+                onTap={() =>
                   navigationHandler('TransactionDetail', {type: 'expense'})
                 }
                 color={appColors.red}
@@ -241,7 +245,7 @@ const Home = ({
               style={[styles.transactionButton, styles.animateButton(-60)]}>
               <FloatButton
                 position={{bottom: 0, right: 0}}
-                onClick={() =>
+                onTap={() =>
                   navigationHandler('TransactionDetail', {type: 'income'})
                 }
                 color={appColors.green}
@@ -259,7 +263,7 @@ const Home = ({
         )}
         <FloatButton
           position={{bottom: 40, right: 30}}
-          onClick={toggleAnimationHandler}
+          onTap={toggleAnimationHandler}
           icon={
             <Icon
               as={Entypo}
@@ -306,10 +310,12 @@ const Home = ({
           </View>
           {renderFloatButtonWithAnimation()}
         </View>
-        <BottomActionSheetModal
-          showModal={toggleViewTransactionModal}
-          setShowModal={setToggleViewTransactionModal}
-        />
+        {toggleViewTransactionModal && (
+          <BottomActionSheetModal
+            showModal={toggleViewTransactionModal}
+            setShowModal={setToggleViewTransactionModal}
+          />
+        )}
       </SafeAreaView>
     </PageContainer>
   );

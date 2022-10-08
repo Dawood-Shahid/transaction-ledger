@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, Modal, TouchableOpacity} from 'react-native';
 import {Text, View, Image, Icon} from 'native-base';
+import {format} from 'date-fns';
+import {useNavigation} from '@react-navigation/native';
 
 import StatusTags from '../StatusTags';
 
@@ -9,115 +11,38 @@ import {numberFormatter} from '../../core/helper/HelperFunctions';
 import {TRANSACTION_TYPE_EXPENSE} from '../../appConstants';
 import appStyles from '../../styles/style';
 import appColors from '../../styles/color';
+import ImagesPreviewModal from '../ImagePreviewModal/ImagePreviewModal';
 
 export const BottomActionSheetModal = ({
   showModal,
   setShowModal,
-  heading,
-  message,
-  onCancel,
-  onSubmit,
-  showTopCancelbutton = false,
-  topCancelbutton,
-  customButtons = false,
+  // heading,
+  // message,
+  // onCancel,
+  // onSubmit,
+  // showTopCancelbutton = false,
+  // topCancelbutton,
+  // customButtons = false,
+  // state
+  selectedTransaction: data,
 }) => {
-  const data = {
-    id: 1,
-    title: 'Monthly Income',
-    transactionDate: '08-08-2022',
-    transactionTime: '10:00 AM',
-    category: 'Salary',
-    paymentMethod: 'Online',
-    balance: '80000',
-    amount: '65000',
-    type: 'income',
-    attachments: [
-      {
-        fileCopyUri:
-          'file:///data/user/0/com.transection_leasure/cache/8ead2b70-270f-4f9e-90df-732edb6b128d.JPEG',
-        fileName:
-          'rn_image_picker_lib_temp_677b29a2-bfa3-439f-87a1-6149de9b50bf.jpg',
-        fileSize: 43486,
-        height: 894,
-        id: 0,
-        name: '8ead2b70-270f-4f9e-90df-732edb6b128d.JPEG',
-        size: 50534,
-        type: 'image/jpeg',
-        uri: 'file:///data/user/0/com.transection_leasure/cache/rn_image_picker_lib_temp_677b29a2-bfa3-439f-87a1-6149de9b50bf.jpg',
-        width: 720,
-      },
-      {
-        fileCopyUri:
-          'file:///data/user/0/com.transection_leasure/cache/8ead2b70-270f-4f9e-90df-732edb6b128d.JPEG',
-        fileName:
-          'rn_image_picker_lib_temp_677b29a2-bfa3-439f-87a1-6149de9b50bf.jpg',
-        fileSize: 43486,
-        height: 894,
-        id: 1,
-        name: '8ead2b70-270f-4f9e-90df-732edb6b128d.JPEG',
-        size: 50534,
-        type: 'image/jpeg',
-        uri: 'file:///data/user/0/com.transection_leasure/cache/rn_image_picker_lib_temp_677b29a2-bfa3-439f-87a1-6149de9b50bf.jpg',
-        width: 720,
-      },
-      {
-        fileCopyUri:
-          'file:///data/user/0/com.transection_leasure/cache/8ead2b70-270f-4f9e-90df-732edb6b128d.JPEG',
-        fileName:
-          'rn_image_picker_lib_temp_677b29a2-bfa3-439f-87a1-6149de9b50bf.jpg',
-        fileSize: 43486,
-        height: 894,
-        id: 2,
-        name: '8ead2b70-270f-4f9e-90df-732edb6b128d.JPEG',
-        size: 50534,
-        type: 'image/jpeg',
-        uri: 'file:///data/user/0/com.transection_leasure/cache/rn_image_picker_lib_temp_677b29a2-bfa3-439f-87a1-6149de9b50bf.jpg',
-        width: 720,
-      },
-      {
-        fileCopyUri:
-          'file:///data/user/0/com.transection_leasure/cache/8ead2b70-270f-4f9e-90df-732edb6b128d.JPEG',
-        fileName:
-          'rn_image_picker_lib_temp_677b29a2-bfa3-439f-87a1-6149de9b50bf.jpg',
-        fileSize: 43486,
-        height: 894,
-        id: 0,
-        name: '8ead2b70-270f-4f9e-90df-732edb6b128d.JPEG',
-        size: 50534,
-        type: 'image/jpeg',
-        uri: 'file:///data/user/0/com.transection_leasure/cache/rn_image_picker_lib_temp_677b29a2-bfa3-439f-87a1-6149de9b50bf.jpg',
-        width: 720,
-      },
-      {
-        fileCopyUri:
-          'file:///data/user/0/com.transection_leasure/cache/8ead2b70-270f-4f9e-90df-732edb6b128d.JPEG',
-        fileName:
-          'rn_image_picker_lib_temp_677b29a2-bfa3-439f-87a1-6149de9b50bf.jpg',
-        fileSize: 43486,
-        height: 894,
-        id: 1,
-        name: '8ead2b70-270f-4f9e-90df-732edb6b128d.JPEG',
-        size: 50534,
-        type: 'image/jpeg',
-        uri: 'file:///data/user/0/com.transection_leasure/cache/rn_image_picker_lib_temp_677b29a2-bfa3-439f-87a1-6149de9b50bf.jpg',
-        width: 720,
-      },
-      {
-        fileCopyUri:
-          'file:///data/user/0/com.transection_leasure/cache/8ead2b70-270f-4f9e-90df-732edb6b128d.JPEG',
-        fileName:
-          'rn_image_picker_lib_temp_677b29a2-bfa3-439f-87a1-6149de9b50bf.jpg',
-        fileSize: 43486,
-        height: 894,
-        id: 2,
-        name: '8ead2b70-270f-4f9e-90df-732edb6b128d.JPEG',
-        size: 50534,
-        type: 'image/jpeg',
-        uri: 'file:///data/user/0/com.transection_leasure/cache/rn_image_picker_lib_temp_677b29a2-bfa3-439f-87a1-6149de9b50bf.jpg',
-        width: 720,
-      },
-    ],
+  const navigation = useNavigation();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [imageURls, setImageUrls] = useState([]);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    let urls = data.attachments.map(attachment => {
+      return {url: attachment.fileCopyUri};
+    });
+    setImageUrls(urls);
+  }, [data]);
+
+  const onEdit = () => {
+    navigation.navigate('TransactionDetail', {...data});
+    setShowModal(false);
   };
+
   return (
     <Modal animationType={'slide'} transparent={true} visible={showModal}>
       <TouchableOpacity style={styles.modal} activeOpacity={1}>
@@ -151,7 +76,13 @@ export const BottomActionSheetModal = ({
                 <View style={appStyles.flexRow}>
                   <Text fontSize={'md'}>Transaction on</Text>
                   <Text fontSize={'md'}>
-                    {data.transactionDate}, {data.transactionTime}
+                    {`${format(
+                      new Date(parseInt(data.transactionDate, 10)),
+                      'MMM, dd yyyy',
+                    )} | ${format(
+                      new Date(parseInt(data.transactionTime, 10)),
+                      'hh:mm a',
+                    )}`}
                   </Text>
                 </View>
                 <Text my={1} fontSize={'lg'}>
@@ -202,9 +133,8 @@ export const BottomActionSheetModal = ({
                       activeOpacity={0.7}
                       key={index}
                       onPress={() => {
-                        console.log(`\nImage tap\n`);
-                        // setCurrentImageIndex(index);
-                        // setModalVisible(true);
+                        setCurrentImageIndex(index);
+                        setModalVisible(true);
                       }}>
                       <View style={styles.imageWrapper}>
                         <Image
@@ -220,9 +150,19 @@ export const BottomActionSheetModal = ({
                 </View>
               </View>
             </View>
+            {modalVisible && (
+              <View>
+                <ImagesPreviewModal
+                  modalVisible={modalVisible}
+                  setModalVisible={setModalVisible}
+                  imageUrls={imageURls}
+                  selectedImageIndex={currentImageIndex}
+                />
+              </View>
+            )}
             <TouchableOpacity
               activeOpacity={0.9}
-              onPress={() => console.log(`\nEdit transaction\n`)}
+              onPress={onEdit}
               style={styles.button}>
               <Text
                 color={appColors.white}
@@ -288,7 +228,6 @@ const styles = StyleSheet.create({
   imageContainer: {
     ...appStyles.flexCount(1),
     marginVertical: 5,
-    width: '100%',
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
@@ -311,21 +250,4 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     ...appStyles.containerBorderRadius(100),
   },
-  // heading: {
-  //   marginBottom: 10,
-  // },
-  // whiteText: {color: appColors.white, textAlign: 'center'},
-  // // Button
-  // buttonsContainer: {
-  //   flexDirection: 'row',
-  //   borderTopWidth: 0.5,
-  //   borderTopColor: appColors.lightGray,
-  //   marginTop: 26,
-  // },
-  // button: {flex: 1, justifyContent: 'center'},
-  // fullWidth: {flex: 1},
-  // leftButton: {
-  //   borderRightWidth: 0.5,
-  //   borderRightColor: appColors.lightGray,
-  // },
 });
