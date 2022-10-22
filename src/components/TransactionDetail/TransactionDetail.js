@@ -37,10 +37,10 @@ const TransactionDetail = ({
 }) => {
   const navigation = useNavigation();
   const navigationProps = route.params;
+  const identity = Date.now().toString();
   const isTransactionExpense =
     navigationProps.type === TRANSACTION_TYPE_EXPENSE;
   const transactionType = isTransactionExpense ? 'Out' : 'In';
-  const identity = Date.now().toString();
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [toggleActionSheet, setToggleActionSheet] = useState(false);
@@ -51,18 +51,19 @@ const TransactionDetail = ({
 
   const {control, handleSubmit, setValue, getValues, reset} = useForm({
     mode: 'onChange',
+    shouldUnregister: false,
     defaultValues: {
       title: '',
       amount: 0,
       date: identity,
       time: identity,
-      category: isTransactionExpense ? 'Labour Changes' : 'Profit',
-      payment: 'Cash',
+      category: isTransactionExpense ? 'labour changes' : 'profit',
+      payment: 'cash',
       attachments: [],
     },
   });
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (
       navigationProps.hasOwnProperty('title') &&
       navigationProps.hasOwnProperty('amount')
@@ -85,7 +86,8 @@ const TransactionDetail = ({
       setValue('payment', paymentMethod);
       setValue('attachments', attachments);
     }
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -141,8 +143,8 @@ const TransactionDetail = ({
       amount,
       transactionDate: date,
       transactionTime: time,
-      category: category.toLowerCase(),
-      paymentMethod: payment.toLowerCase(),
+      category: category,
+      paymentMethod: payment,
       attachments,
       balance,
       type: isTransactionExpense ? 'expense' : 'income',
@@ -175,8 +177,14 @@ const TransactionDetail = ({
                 name={'title'}
                 render={({field: {onChange, value}}) => {
                   const {title, amount} = getValues();
-                  setIsButtonDisabled(!(!!title.length && !!amount));
-
+                  setIsButtonDisabled(
+                    !(
+                      !!title?.length &&
+                      title !== navigationProps?.title &&
+                      !!amount &&
+                      amount !== navigationProps?.amount
+                    ),
+                  );
                   return (
                     <InputField
                       value={value}
@@ -194,7 +202,14 @@ const TransactionDetail = ({
                 name={'amount'}
                 render={({field: {onChange, value}}) => {
                   const {title, amount} = getValues();
-                  setIsButtonDisabled(!(!!title.length && !!amount));
+                  setIsButtonDisabled(
+                    !(
+                      !!title?.length &&
+                      title !== navigationProps?.title &&
+                      !!amount &&
+                      amount !== navigationProps?.amount
+                    ),
+                  );
                   return (
                     <InputField
                       label={'Amount'}
@@ -303,7 +318,11 @@ const TransactionDetail = ({
                         variant={'unstyled'}
                         mx={1}>
                         {CATEGORY.map((item, index) => (
-                          <Select.Item key={index} label={item} value={item} />
+                          <Select.Item
+                            key={index}
+                            label={item}
+                            value={item.toLowerCase()}
+                          />
                         ))}
                       </Select>
                     }
@@ -321,13 +340,18 @@ const TransactionDetail = ({
                     otherInputField={
                       <Select
                         color={appColors.black}
+                        textTransform={'capitalize'}
                         size={'lg'}
                         selectedValue={value}
                         onValueChange={onChange}
-                        variant="unstyled"
+                        variant={'unstyled'}
                         mx={1}>
                         {PAYMENT.map((item, index) => (
-                          <Select.Item key={index} label={item} value={item} />
+                          <Select.Item
+                            key={index}
+                            label={item}
+                            value={item.toLowerCase()}
+                          />
                         ))}
                       </Select>
                     }
@@ -524,6 +548,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
     paddingHorizontal: 6,
   },
+  calculatorBackdrop: {
+    backgroundColor: appColors.background,
+    position: 'absolute',
+    bottom: 0,
+    height: '68%',
+  },
   uploadImageContainer: {
     paddingLeft: 17,
     paddingRight: 8,
@@ -569,11 +599,6 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
   buttonSeparator: {borderColor: appColors.white, borderWidth: 0.25},
-  calculatorBackdrop: {
-    backgroundColor: appColors.white,
-    position: 'absolute',
-    bottom: 0,
-  },
   btnContainer: {
     ...appStyles.flexRow,
     padding: 10,
