@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "transection_leasure.app"
-               BlueprintName = "transection_leasure"
-               ReferencedContainer = "container:transection_leasure.xcodeproj">
+               BuildableName = "transaction_ledger.app"
+               BlueprintName = "transaction_ledger"
+               ReferencedContainer = "container:transaction_ledger.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "transection_leasureTests.xctest"
-               BlueprintName = "transection_leasureTests"
-               ReferencedContainer = "container:transection_leasure.xcodeproj">
+               BuildableName = "transaction_ledgerTests.xctest"
+               BlueprintName = "transaction_ledgerTests"
+               ReferencedContainer = "container:transaction_ledger.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "transection_leasure.app"
-            BlueprintName = "transection_leasure"
-            ReferencedContainer = "container:transection_leasure.xcodeproj">
+            BuildableName = "transaction_ledger.app"
+            BlueprintName = "transaction_ledger"
+            ReferencedContainer = "container:transaction_ledger.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "transection_leasure.app"
-            BlueprintName = "transection_leasure"
-            ReferencedContainer = "container:transection_leasure.xcodeproj">
+            BuildableName = "transaction_ledger.app"
+            BlueprintName = "transaction_ledger"
+            ReferencedContainer = "container:transaction_ledger.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
