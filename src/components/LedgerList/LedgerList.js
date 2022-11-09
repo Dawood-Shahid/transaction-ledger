@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   VirtualizedList,
 } from 'react-native';
-import {View, Text, Input, Icon} from 'native-base';
+import {View, Text, Button} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 import {format} from 'date-fns';
 import {useForm, Controller} from 'react-hook-form';
@@ -13,14 +13,14 @@ import {useForm, Controller} from 'react-hook-form';
 import PageContainer from '../PageContainer';
 import Header from '../Header';
 import Modal from '../Modal';
-import InputField from '../InputField/InputField';
+import InputField from '../InputField';
 
 import {numberFormatter} from '../../core/helper/HelperFunctions';
-import {
-  Feather,
-  Ionicons,
-  MaterialCommunityIcons,
-} from '../../assets/vectorIcons';
+import FontAwesomeIcon, {
+  faTrashAlt,
+  faPenToSquare,
+  faPlus,
+} from '../../assets/fontAwesomeIcons';
 import appStyles from '../../styles/style';
 import appColors from '../../styles/color';
 
@@ -127,23 +127,13 @@ const LedgerList = ({
               activeOpacity={0.7}
               style={styles.icon(appColors.greenBackground, appColors.green)}
               onPress={() => ledgerEditHandler(item)}>
-              <Icon
-                as={Feather}
-                name={'edit-3'}
-                size={'5'}
-                color={appColors.green}
-              />
+              <FontAwesomeIcon icon={faPenToSquare} color={appColors.green} />
             </TouchableOpacity>
             <TouchableOpacity
               activeOpacity={0.7}
               style={styles.icon(appColors.redBackground, appColors.red)}
               onPress={() => ledgerDeleteHandler(item)}>
-              <Icon
-                as={MaterialCommunityIcons}
-                name={'delete-outline'}
-                size={'5'}
-                color={appColors.red}
-              />
+              <FontAwesomeIcon icon={faTrashAlt} color={appColors.red} />
             </TouchableOpacity>
           </View>
         </View>
@@ -157,46 +147,31 @@ const LedgerList = ({
         title={'Rename Ledger'}
         onOutsideTap={cancelHandler}
         content={
-          <View my={4} style={styles.inputContainer}>
-            {/* //! should use hook forms */}
-            <Input
-              value={localSelectedLedger.title}
-              onChangeText={text =>
-                setLocalSelectedLedger({...localSelectedLedger, title: text})
-              }
-              size="md"
-              variant="unstyled"
-              width={'2xs'}
-              pl={4}
-              color={appColors.black}
-            />
-          </View>
+          //! should use hook forms
+          <InputField
+            value={localSelectedLedger.title}
+            setValue={text =>
+              setLocalSelectedLedger({...localSelectedLedger, title: text})
+            }
+          />
         }
         buttons={
-          <View style={{...appStyles.flexRow}}>
-            <TouchableOpacity
-              activeOpacity={0.9}
-              onPress={updateHandler}
-              style={styles.button(appColors.green)}>
-              <Text
-                color={appColors.white}
-                textTransform={'uppercase'}
-                textAlign={'center'}>
-                Update
-              </Text>
-            </TouchableOpacity>
-            <View style={styles.buttonSeparator} />
-            <TouchableOpacity
-              activeOpacity={0.9}
-              onPress={cancelHandler}
-              style={styles.button(appColors.red, true)}>
-              <Text
-                color={appColors.white}
-                textTransform={'uppercase'}
-                textAlign={'center'}>
-                Cancel
-              </Text>
-            </TouchableOpacity>
+          <View style={styles.btnContainer}>
+            <Button
+              style={[
+                appStyles.button(appColors.white, appColors.red),
+                appStyles.containerBorderRadius(),
+              ]}
+              _text={appStyles.buttonText(appColors.red)}
+              onPress={cancelHandler}>
+              Cancel
+            </Button>
+            <Button
+              style={[appStyles.button(), appStyles.containerBorderRadius()]}
+              _text={appStyles.buttonText()}
+              onPress={updateHandler}>
+              Update
+            </Button>
           </View>
         }
       />
@@ -209,41 +184,31 @@ const LedgerList = ({
         title={'Delete Ledger'}
         onOutsideTap={cancelHandler}
         content={
-          <View my={4}>
-            <Text fontSize={'md'}>
-              Are you sure, you want to delete{' '}
-              <Text color={appColors.red} bold>
-                {localSelectedLedger.title}
-              </Text>
-              ?
+          <Text fontSize={'md'}>
+            Are you sure, you want to delete{' '}
+            <Text color={appColors.red} bold>
+              {localSelectedLedger.title}
             </Text>
-          </View>
+            ?
+          </Text>
         }
         buttons={
-          <View style={{...appStyles.flexRow}}>
-            <TouchableOpacity
-              activeOpacity={0.9}
-              onPress={deleteHandler}
-              style={styles.button(appColors.red)}>
-              <Text
-                color={appColors.white}
-                textTransform={'uppercase'}
-                textAlign={'center'}>
-                Delete
-              </Text>
-            </TouchableOpacity>
-            <View style={styles.buttonSeparator} />
-            <TouchableOpacity
-              activeOpacity={0.9}
-              onPress={cancelHandler}
-              style={styles.button(appColors.green, true)}>
-              <Text
-                color={appColors.white}
-                textTransform={'uppercase'}
-                textAlign={'center'}>
-                Cancel
-              </Text>
-            </TouchableOpacity>
+          <View style={styles.btnContainer}>
+            <Button
+              style={[appStyles.button(), appStyles.containerBorderRadius()]}
+              _text={appStyles.buttonText()}
+              onPress={cancelHandler}>
+              Cancel
+            </Button>
+            <Button
+              style={[
+                appStyles.button(appColors.white, appColors.red),
+                appStyles.containerBorderRadius(),
+              ]}
+              _text={appStyles.buttonText(appColors.red)}
+              onPress={deleteHandler}>
+              Delete
+            </Button>
           </View>
         }
       />
@@ -271,10 +236,8 @@ const LedgerList = ({
                       disabled={!value}
                       onPress={handleSubmit(addLedgerHandler)}
                       style={styles.addButton}>
-                      <Icon
-                        as={Ionicons}
-                        name={'md-add'}
-                        size={'6'}
+                      <FontAwesomeIcon
+                        icon={faPlus}
                         color={appColors.primary}
                       />
                     </TouchableOpacity>
@@ -321,14 +284,6 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 8,
   },
   inputCustomStyles: {
-    margin: 10,
-  },
-  inputContainer: {
-    ...appStyles.containerBorderRadius(),
-    borderWidth: 0.75,
-    borderColor: appColors.primary,
-    backgroundColor: appColors.white,
-    height: 46,
     margin: 10,
   },
   addButton: {
@@ -388,21 +343,26 @@ const styles = StyleSheet.create({
     borderColor: color,
     ...appStyles.containerBorderRadius(100),
   }),
-  button: (background, right = false) => ({
-    backgroundColor: background,
-    paddingVertical: 12,
-    width: '50%',
-    ...(right
-      ? {
-          borderTopRightRadius: 100,
-          borderBottomRightRadius: 100,
-        }
-      : {
-          borderTopLeftRadius: 100,
-          borderBottomLeftRadius: 100,
-        }),
-  }),
-  buttonSeparator: {borderColor: appColors.primary, borderWidth: 0.25},
+  // button: (background, right = false) => ({
+  //   backgroundColor: background,
+  //   paddingVertical: 12,
+  //   width: '50%',
+  //   ...(right
+  //     ? {
+  //         borderTopRightRadius: 100,
+  //         borderBottomRightRadius: 100,
+  //       }
+  //     : {
+  //         borderTopLeftRadius: 100,
+  //         borderBottomLeftRadius: 100,
+  //       }),
+  // }),
+  // buttonSeparator: {borderColor: appColors.primary, borderWidth: 0.25},
+  btnContainer: {
+    ...appStyles.flexRow,
+    // paddingVertical: 10,
+    // backgroundColor: 'pink',
+  },
 });
 
 export default LedgerList;

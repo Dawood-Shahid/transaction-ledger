@@ -29,8 +29,7 @@ const appStyles = StyleSheet.create({
   },
   button: (bg = appColors.primary, border = appColors.transparent) => ({
     backgroundColor: bg,
-    height: 40,
-    width: '50%',
+    width: '49.5%',
     borderWidth: 1,
     borderColor: border,
   }),

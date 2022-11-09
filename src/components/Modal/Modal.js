@@ -15,7 +15,9 @@ const Modal = ({title, content, buttons, onOutsideTap}) => {
         <Text fontSize={'lg'} bold color={appColors.black}>
           {title}
         </Text>
-        <View>{content && content}</View>
+        <View width={'100%'} my={4}>
+          {content && content}
+        </View>
         <View>{buttons && buttons}</View>
       </View>
     </TouchableOpacity>
