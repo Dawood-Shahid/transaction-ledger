@@ -15,8 +15,12 @@ import Header from '../Header';
 import FloatButton from '../FloatButton';
 import BottomActionSheetModal from '../BottomActionSheetModal';
 
-import {Entypo, Ionicons, AntDesign} from '../../assets/vectorIcons';
-import FontAwesomeIcon, {faBookBookmark} from '../../assets/fontAwesomeIcons';
+import {Entypo} from '../../assets/vectorIcons';
+import FontAwesomeIcon, {
+  faBookBookmark,
+  faPlus,
+  faMinus,
+} from '../../assets/fontAwesomeIcons';
 import StatusTags from '../StatusTags';
 import {TRANSACTION_TYPE_EXPENSE} from '../../appConstants';
 import {numberFormatter} from '../../core/helper/HelperFunctions';
@@ -232,12 +236,7 @@ const Home = ({
                 }
                 color={appColors.red}
                 icon={
-                  <Icon
-                    as={AntDesign}
-                    name={'minus'}
-                    size={'6'}
-                    color={appColors.white}
-                  />
+                  <FontAwesomeIcon icon={faMinus} color={appColors.white} />
                 }
               />
             </Animated.View>
@@ -249,14 +248,7 @@ const Home = ({
                   navigationHandler('TransactionDetail', {type: 'income'})
                 }
                 color={appColors.green}
-                icon={
-                  <Icon
-                    as={Ionicons}
-                    name={'md-add'}
-                    size={'6'}
-                    color={appColors.white}
-                  />
-                }
+                icon={<FontAwesomeIcon icon={faPlus} color={appColors.white} />}
               />
             </Animated.View>
           </>
