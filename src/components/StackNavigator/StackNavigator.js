@@ -8,7 +8,6 @@ import Home from '../Home';
 import TransactionDetail from '../TransactionDetail';
 import Menu from '../Menu';
 import {MaterialCommunityIcons} from '../../assets/vectorIcons';
-import FontAwesomeIcon, {faBarsStaggered} from '../../assets/fontAwesomeIcons';
 import appColors from '../../styles/color';
 
 const StackNavigator = () => {
@@ -69,10 +68,11 @@ const BottomTab = () => {
                 />
               )}
               {route.name === 'Menu' && (
-                <FontAwesomeIcon
-                  icon={faBarsStaggered}
+                <Icon
+                  as={MaterialCommunityIcons}
+                  name={'view-grid-plus'}
+                  size={'9'}
                   color={color}
-                  size={28}
                 />
               )}
             </View>

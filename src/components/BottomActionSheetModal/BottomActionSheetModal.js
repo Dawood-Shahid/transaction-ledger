@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, Modal, TouchableOpacity} from 'react-native';
-import {Text, View, Image, Icon} from 'native-base';
+import {Text, View, Image, Icon, Button} from 'native-base';
 import {format} from 'date-fns';
 import {useNavigation} from '@react-navigation/native';
 
@@ -14,17 +14,12 @@ import appColors from '../../styles/color';
 import ImagesPreviewModal from '../ImagePreviewModal/ImagePreviewModal';
 
 export const BottomActionSheetModal = ({
-  showModal,
-  setShowModal,
-  // heading,
-  // message,
-  // onCancel,
-  // onSubmit,
-  // showTopCancelbutton = false,
-  // topCancelbutton,
-  // customButtons = false,
   // state
   selectedTransaction: data,
+  showModal,
+  // action
+  setShowModal,
+  deleteTransaction,
 }) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
@@ -40,6 +35,11 @@ export const BottomActionSheetModal = ({
 
   const onEdit = () => {
     navigation.navigate('TransactionDetail', {...data});
+    setShowModal(false);
+  };
+
+  const onDelete = () => {
+    deleteTransaction(data);
     setShowModal(false);
   };
 
@@ -160,17 +160,23 @@ export const BottomActionSheetModal = ({
                 />
               </View>
             )}
-            <TouchableOpacity
-              activeOpacity={0.9}
-              onPress={onEdit}
-              style={styles.button}>
-              <Text
-                color={appColors.white}
-                textTransform={'uppercase'}
-                textAlign={'center'}>
+            <View style={styles.btnContainer}>
+              <Button
+                style={[
+                  appStyles.button(appColors.white, appColors.red),
+                  appStyles.containerBorderRadius(),
+                ]}
+                _text={appStyles.buttonText(appColors.red)}
+                onPress={onDelete}>
+                Delete
+              </Button>
+              <Button
+                style={[appStyles.button(), appStyles.containerBorderRadius()]}
+                _text={appStyles.buttonText()}
+                onPress={onEdit}>
                 Edit
-              </Text>
-            </TouchableOpacity>
+              </Button>
+            </View>
           </View>
         </View>
       </TouchableOpacity>
@@ -245,9 +251,7 @@ const styles = StyleSheet.create({
     height: 65,
     width: 65,
   },
-  button: {
-    backgroundColor: appColors.primary,
-    paddingVertical: 12,
-    ...appStyles.containerBorderRadius(100),
+  btnContainer: {
+    ...appStyles.flexRow,
   },
 });

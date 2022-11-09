@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useLayoutEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {SafeAreaView, StyleSheet, TouchableOpacity} from 'react-native';
 import {
   View,
@@ -19,7 +19,7 @@ import {useForm, Controller} from 'react-hook-form';
 import PageContainer from '../PageContainer';
 import Header from '../Header';
 import ImagesPreviewModal from '../ImagePreviewModal/ImagePreviewModal';
-import InputField from '../InputField/InputField';
+import InputField from '../InputField';
 
 import {ImagePicker} from '../../core/helper/FileSystemManager';
 import {TRANSACTION_TYPE_EXPENSE} from '../../appConstants';
@@ -34,6 +34,7 @@ const TransactionDetail = ({
   selectedLedger,
   // actions
   addTransaction,
+  updateTransaction,
 }) => {
   const navigation = useNavigation();
   const navigationProps = route.params;
@@ -48,6 +49,7 @@ const TransactionDetail = ({
   const [showImagesPreviewModal, setShowImagesPreviewModal] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [previousAmount, setPreviousAmount] = useState(0);
 
   const {control, handleSubmit, setValue, getValues, reset} = useForm({
     mode: 'onChange',
@@ -85,6 +87,7 @@ const TransactionDetail = ({
       setValue('category', category);
       setValue('payment', paymentMethod);
       setValue('attachments', attachments);
+      setPreviousAmount(+amount);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -128,17 +131,29 @@ const TransactionDetail = ({
 
   const saveHandler = (addNew = false) => {
     const data = getValues();
+    const {id} = navigationProps;
     const {title, amount, date, time, category, payment, attachments} = data;
     let balance;
 
     if (isTransactionExpense) {
-      balance = selectedLedger.cashIn - selectedLedger.cashOut - amount;
+      balance =
+        selectedLedger.cashIn -
+        selectedLedger.cashOut +
+        previousAmount -
+        amount;
     } else {
-      balance = selectedLedger.cashIn - selectedLedger.cashOut + amount;
+      balance =
+        selectedLedger.cashIn -
+        selectedLedger.cashOut -
+        previousAmount +
+        amount;
     }
 
     const params = {
-      id: identity,
+      ...(navigationProps.hasOwnProperty('title') &&
+      navigationProps.hasOwnProperty('amount')
+        ? {id}
+        : {id: identity}),
       title,
       amount,
       transactionDate: date,
@@ -150,7 +165,14 @@ const TransactionDetail = ({
       type: isTransactionExpense ? 'expense' : 'income',
     };
 
-    addTransaction(params);
+    if (
+      navigationProps.hasOwnProperty('title') &&
+      navigationProps.hasOwnProperty('amount')
+    ) {
+      updateTransaction(params);
+    } else {
+      addTransaction(params);
+    }
 
     if (!addNew) {
       navigation.goBack();
@@ -162,29 +184,21 @@ const TransactionDetail = ({
       <SafeAreaView style={appStyles.flexCount(1)}>
         <Header title={'Transaction Detail'} />
         <View style={styles.mainContainer}>
-          <Text
-            color={isTransactionExpense ? appColors.red : appColors.green}
-            py={1}
-            px={2.5}
-            bold
-            fontSize={'lg'}>
-            Enter Cash {transactionType} Details
-          </Text>
           <ScrollView contentContainerStyle={styles.scrollContainer}>
+            <Text
+              color={isTransactionExpense ? appColors.red : appColors.green}
+              py={1}
+              bold
+              fontSize={'lg'}>
+              Enter Cash {transactionType} Details
+            </Text>
             <View style={styles.inputWrapper}>
               <Controller
                 control={control}
                 name={'title'}
                 render={({field: {onChange, value}}) => {
                   const {title, amount} = getValues();
-                  setIsButtonDisabled(
-                    !(
-                      !!title?.length &&
-                      title !== navigationProps?.title &&
-                      !!amount &&
-                      amount !== navigationProps?.amount
-                    ),
-                  );
+                  setIsButtonDisabled(!(!!title?.length && !!amount));
                   return (
                     <InputField
                       value={value}
@@ -202,14 +216,7 @@ const TransactionDetail = ({
                 name={'amount'}
                 render={({field: {onChange, value}}) => {
                   const {title, amount} = getValues();
-                  setIsButtonDisabled(
-                    !(
-                      !!title?.length &&
-                      title !== navigationProps?.title &&
-                      !!amount &&
-                      amount !== navigationProps?.amount
-                    ),
-                  );
+                  setIsButtonDisabled(!(!!title?.length && !!amount));
                   return (
                     <InputField
                       label={'Amount'}
@@ -316,6 +323,14 @@ const TransactionDetail = ({
                         selectedValue={value}
                         onValueChange={onChange}
                         variant={'unstyled'}
+                        dropdownIcon={
+                          <Icon
+                            as={Ionicons}
+                            name={'chevron-down-sharp'}
+                            size={'5'}
+                            color={appColors.inputIconColor}
+                          />
+                        }
                         mx={1}>
                         {CATEGORY.map((item, index) => (
                           <Select.Item
@@ -345,6 +360,14 @@ const TransactionDetail = ({
                         selectedValue={value}
                         onValueChange={onChange}
                         variant={'unstyled'}
+                        dropdownIcon={
+                          <Icon
+                            as={Ionicons}
+                            name={'chevron-down-sharp'}
+                            size={'5'}
+                            color={appColors.inputIconColor}
+                          />
+                        }
                         mx={1}>
                         {PAYMENT.map((item, index) => (
                           <Select.Item
@@ -425,111 +448,117 @@ const TransactionDetail = ({
                 }
               />
             </View>
-          </ScrollView>
-          {showDatePicker && (
-            <Controller
-              control={control}
-              name={'date'}
-              render={({field: {onChange, value}}) => (
-                <DateTimePicker
-                  value={new Date(parseInt(value, 10))}
-                  mode={'date'}
-                  is24Hour={true}
-                  onChange={event => {
-                    const {nativeEvent, type} = event;
-                    setShowDatePicker(false);
-                    if (type === 'set') {
-                      onChange(nativeEvent.timestamp.toString());
-                    }
-                  }}
-                />
-              )}
-            />
-          )}
-          {showTimePicker && (
-            <Controller
-              control={control}
-              name={'time'}
-              render={({field: {onChange, value}}) => (
-                <DateTimePicker
-                  value={new Date(parseInt(value, 10))}
-                  mode={'time'}
-                  is24Hour={false}
-                  onChange={event => {
-                    const {nativeEvent, type} = event;
-                    setShowTimePicker(false);
-                    if (type === 'set') {
-                      onChange(nativeEvent.timestamp.toString());
-                    }
-                  }}
-                />
-              )}
-            />
-          )}
-          {toggleActionSheet && (
-            <Actionsheet
-              isOpen={toggleActionSheet}
-              onClose={() => setToggleActionSheet(false)}>
-              <Actionsheet.Content>
-                <Actionsheet.Item
-                  _text={styles.actionSheetText}
-                  startIcon={
-                    <Icon
-                      as={Ionicons}
-                      name={'camera-outline'}
-                      size={'5'}
-                      color={appColors.inputIconColor}
-                    />
-                  }
-                  onPress={() => uploadImageHandler(true)}>
-                  Camera
-                </Actionsheet.Item>
-                <Actionsheet.Item
-                  _text={styles.actionSheetText}
-                  startIcon={
-                    <Icon
-                      as={Ionicons}
-                      name={'md-images'}
-                      size={'5'}
-                      color={appColors.inputIconColor}
-                    />
-                  }
-                  onPress={() => uploadImageHandler(false)}>
-                  Gallery
-                </Actionsheet.Item>
-              </Actionsheet.Content>
-            </Actionsheet>
-          )}
-          {showImagesPreviewModal && (
-            <View>
-              <ImagesPreviewModal
-                modalVisible={showImagesPreviewModal}
-                setModalVisible={setShowImagesPreviewModal}
-                imageUrls={imageURls}
-                selectedImageIndex={currentImageIndex}
+            {/* </ScrollView> */}
+            {showDatePicker && (
+              <Controller
+                control={control}
+                name={'date'}
+                render={({field: {onChange, value}}) => (
+                  <DateTimePicker
+                    value={new Date(parseInt(value, 10))}
+                    mode={'date'}
+                    is24Hour={true}
+                    onChange={event => {
+                      const {nativeEvent, type} = event;
+                      setShowDatePicker(false);
+                      if (type === 'set') {
+                        onChange(nativeEvent.timestamp.toString());
+                      }
+                    }}
+                  />
+                )}
               />
+            )}
+            {showTimePicker && (
+              <Controller
+                control={control}
+                name={'time'}
+                render={({field: {onChange, value}}) => (
+                  <DateTimePicker
+                    value={new Date(parseInt(value, 10))}
+                    mode={'time'}
+                    is24Hour={false}
+                    onChange={event => {
+                      const {nativeEvent, type} = event;
+                      setShowTimePicker(false);
+                      if (type === 'set') {
+                        onChange(nativeEvent.timestamp.toString());
+                      }
+                    }}
+                  />
+                )}
+              />
+            )}
+            {toggleActionSheet && (
+              <Actionsheet
+                isOpen={toggleActionSheet}
+                onClose={() => setToggleActionSheet(false)}>
+                <Actionsheet.Content>
+                  <Actionsheet.Item
+                    _text={styles.actionSheetText}
+                    startIcon={
+                      <Icon
+                        as={Ionicons}
+                        name={'camera-outline'}
+                        size={'5'}
+                        color={appColors.inputIconColor}
+                      />
+                    }
+                    onPress={() => uploadImageHandler(true)}>
+                    Camera
+                  </Actionsheet.Item>
+                  <Actionsheet.Item
+                    _text={styles.actionSheetText}
+                    startIcon={
+                      <Icon
+                        as={Ionicons}
+                        name={'md-images'}
+                        size={'5'}
+                        color={appColors.inputIconColor}
+                      />
+                    }
+                    onPress={() => uploadImageHandler(false)}>
+                    Gallery
+                  </Actionsheet.Item>
+                </Actionsheet.Content>
+              </Actionsheet>
+            )}
+            {showImagesPreviewModal && (
+              <View>
+                <ImagesPreviewModal
+                  modalVisible={showImagesPreviewModal}
+                  setModalVisible={setShowImagesPreviewModal}
+                  imageUrls={imageURls}
+                  selectedImageIndex={currentImageIndex}
+                />
+              </View>
+            )}
+            <View style={styles.btnContainer}>
+              <Button
+                style={[
+                  appStyles.button(appColors.white, appColors.primary),
+                  appStyles.containerBorderRadius(),
+                ]}
+                _text={appStyles.buttonText(appColors.primary)}
+                isDisabled={isButtonDisabled}
+                onPress={() => handleSubmit(saveHandler(true))}>
+                {navigationProps.hasOwnProperty('title') &&
+                navigationProps.hasOwnProperty('amount')
+                  ? 'Update & Add'
+                  : 'Save & Add'}
+              </Button>
+              <Button
+                style={[appStyles.button(), appStyles.containerBorderRadius()]}
+                _text={appStyles.buttonText()}
+                isDisabled={isButtonDisabled}
+                onPress={() => handleSubmit(saveHandler())}>
+                {navigationProps.hasOwnProperty('title') &&
+                navigationProps.hasOwnProperty('amount')
+                  ? 'Update'
+                  : 'Save'}
+              </Button>
             </View>
-          )}
-          <View style={styles.btnContainer}>
-            <Button
-              style={[
-                appStyles.button(appColors.white, appColors.primary),
-                appStyles.containerBorderRadius(),
-              ]}
-              _text={appStyles.buttonText(appColors.primary)}
-              isDisabled={isButtonDisabled}
-              onPress={() => handleSubmit(saveHandler(true))}>
-              Save & Add
-            </Button>
-            <View style={styles.buttonSeparator} />
-            <Button
-              style={[appStyles.button(), appStyles.containerBorderRadius()]}
-              _text={appStyles.buttonText()}
-              isDisabled={isButtonDisabled}
-              onPress={() => handleSubmit(saveHandler())}>
-              Save
-            </Button>
-          </View>
+          </ScrollView>
         </View>
       </SafeAreaView>
     </PageContainer>
@@ -539,10 +568,13 @@ const TransactionDetail = ({
 const styles = StyleSheet.create({
   mainContainer: {
     ...appStyles.flexCount(1),
-    paddingTop: 10,
     position: 'relative',
   },
-  scrollContainer: {paddingHorizontal: 10},
+  scrollContainer: {
+    paddingTop: 10,
+    paddingHorizontal: 10,
+    minHeight: '100%',
+  },
   inputWrapper: {marginTop: 10},
   calculatorInputFieldContainer: {
     borderBottomWidth: 0,
@@ -598,7 +630,6 @@ const styles = StyleSheet.create({
     backgroundColor: appColors.white,
     borderRadius: 100,
   },
-  buttonSeparator: {borderColor: appColors.white, borderWidth: 0.25},
   btnContainer: {
     ...appStyles.flexRow,
     padding: 10,
